@@ -1,23 +1,49 @@
 import logo from './logo.svg';
-import './App.css';
+
+import { Route, Routes ,BrowserRouter, useLocation} from 'react-router-dom';
+import { useState } from 'react';
+import { ExcersiseLog } from './Components/ExcersiseLog';
+import { Homepage } from './pages/Homepage';
+import { Nav } from './Components/Nav';
+import { Login } from './Components/Login';
+import { Signup } from './Components/Signup';
+import { SignOut } from './Components/SignOut';
+import { PreviousWorkouts } from './Components/PreviousWorkouts';
+import { Dashboard } from './pages/Dashboard';
+import { ForgotPassword } from './Components/ForgotPassword';
+import { ResetPassword } from './Components/ResetPassword';
+import { Recommender } from './Components/Recommender';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  
+  const handleLogin = (loggedIn) => {
+    setIsLoggedIn(loggedIn);
+    
+  };
+  const handleSignOut = () => {
+    // Handle sign out logic here
+
+    setIsLoggedIn(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+     <Nav isLoggedIn={isLoggedIn} onSignOut={handleSignOut} />{/* placed the nav bar at top to be outted on each page */}
+
+     <Routes>
+     <Route  path="/" element={<Homepage/> }/>
+     <Route exact path="/exercise-log" element= {<ExcersiseLog/>}/>
+     <Route exact path="/login" element= {<Login onLogin={handleLogin}/>}/> 
+      <Route exact path="/signup" element= {<Signup/>}/>
+      <Route exact path="/signout" element= {<SignOut/>}/>
+      <Route exact path ="/previous-workouts" element={<PreviousWorkouts/>}/>
+      <Route exact path='/dashboard' element={<Dashboard/>}/>
+      <Route exact path='/forgotpassword' element={<ForgotPassword/>}/>
+      <Route exact path='/resetpassword' element={<ResetPassword/>}/>
+      <Route exact path='/recommender' element={<Recommender/>}/>
+      
+      </Routes>
     </div>
   );
 }
