@@ -5,8 +5,7 @@ import 'react-calendar/dist/Calendar.css';
 import { useLocation } from 'react-router-dom';
 import { auth } from './firebase';
 import { getAuth, onAuthStateChanged,onIdTokenChanged  } from 'firebase/auth'; 
-import { WorkoutCard } from './WorkoutCard';
-
+import { WorkoutLog_Card } from './WorkoutLog';
 export const PreviousWorkouts = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [workoutData, setWorkoutData] = useState(null);
@@ -96,7 +95,7 @@ export const PreviousWorkouts = () => {
 
       {/* Conditional rendering of WorkoutLog_Card */}
       {workoutData !== null ? (
-  <WorkoutCard workoutdata={workoutData} selecteddate={selectedDate} />
+  <WorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
    
 ) : (
   <p>No workout entered on this day</p>

@@ -2,13 +2,13 @@ import React from 'react'
 import { useState,useEffect } from 'react'
 import cx from 'clsx';
 import {Button , Card, CardActionArea,Table,TableHead,TableRow,TableCell,TableBody,CardContent,CardHeader} from '@mui/material'
-import {makeStyles} from '@mui/styles'
-import { useContainedCardHeaderStyles } from '@mui-treasury/styles/cardHeader/contained';
-import { useSoftRiseShadowStyles } from '@mui-treasury/styles/shadow/softRise';
-import { useFadedShadowStyles } from '@mui-treasury/styles/shadow/faded';
+// import { useContainedCardHeaderStyles } from '@mui-treasury/styles/cardHeader/contained';
+// import { useSoftRiseShadowStyles } from '@mui-treasury/styles/shadow/softRise';
+// import { useFadedShadowStyles } from '@mui-treasury/styles/shadow/faded';
+import { styled } from '@mui/system';
 
 
-const useStyles = makeStyles(() => ({
+const useStyles = styled(() => ({
   card: {
     marginTop: 40,
     borderRadius:12,
@@ -46,19 +46,19 @@ export const WorkoutLog_Card = ({workoutdata,selecteddate}) => {
   
 
   const classes = useStyles();
-  const cardHeaderStyles = useContainedCardHeaderStyles();
-  const cardShadowStyles = useSoftRiseShadowStyles({ inactive: true });
-  const cardHeaderShadowStyles = useFadedShadowStyles();
+//   const cardHeaderStyles = useContainedCardHeaderStyles();
+//   const cardShadowStyles = useSoftRiseShadowStyles({ inactive: true });
+//   const cardHeaderShadowStyles = useFadedShadowStyles();
 
     
   if (!Array.isArray(workoutdata)) {
     return <p>No workout data available for {formatedate}.</p>;
   }
   return (
-    <Card className={cx(classes.card, cardShadowStyles.root)}>
+    <Card className={cx(classes.card)}>
       <CardHeader
-        className={cardHeaderShadowStyles.root}
-        classes={cardHeaderStyles}
+        // className={cardHeaderShadowStyles.root}
+        // classes={cardHeaderStyles}
         title={'Excersise Log'}
         subheader={formatedate}
       />
