@@ -13,6 +13,7 @@ import { Dashboard } from './pages/Dashboard';
 import { ForgotPassword } from './Components/ForgotPassword';
 import { ResetPassword } from './Components/ResetPassword';
 import { Recommender } from './Components/Recommender';
+import { Threed } from './Components/Threed';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -42,6 +43,7 @@ function App() {
       <Route exact path='/forgotpassword' element={<ForgotPassword/>}/>
       <Route exact path='/resetpassword' element={<ResetPassword/>}/>
       <Route exact path='/recommender' element={<Recommender/>}/>
+      <Route exact path="/3d" element={<Threed/>} />
       
       </Routes>
     </div>
