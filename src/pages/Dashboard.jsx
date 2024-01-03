@@ -15,6 +15,7 @@ import IMG3 from '../Assets/pexels-koolshooters-7346634.jpg'
 import { ER_Card } from '../Components/ER_Card';
 import { VideoBackground } from '../Components/VideoBackground';
 import videoSource from '../Assets/VideoBackground.mp4'
+import { PreviousWorkouts } from '../Components/PreviousWorkouts';
 const RootContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',
@@ -99,6 +100,7 @@ export const Dashboard = () => {
       </ActionButtonsContainer>
    
   </RootContainer>
+  <PreviousWorkouts/>
   </>
   )
 }

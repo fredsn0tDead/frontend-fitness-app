@@ -6,6 +6,85 @@ import { useLocation } from 'react-router-dom';
 import { auth } from './firebase';
 import { getAuth, onAuthStateChanged,onIdTokenChanged  } from 'firebase/auth'; 
 import { WorkoutLog_Card } from './WorkoutLog';
+import {styled} from '@mui/system';
+import  calendarTheme  from './CalendarTheme';  
+import { ThemeProvider } from '@mui/system';
+const Container = styled('div')`
+  text-align: center;
+  margin: 20px;
+`;
+
+const CalendarHeader = styled('h1')`
+  background-color: ${calendarTheme.palette.primary.main};
+  color: white;
+  padding: 10px;
+  font-size: 24px;
+`;
+
+
+
+const CalendarContainer = styled('div')`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+`;
+
+// Custom styles for the react-calendar component
+const StyledCalendar = styled(Calendar)`
+  && {
+    background-color: ${calendarTheme.palette.background.default};
+    color: ${calendarTheme.palette.text.primary};
+    border: 1px solid ${calendarTheme.palette.secondary.main}; /* Set border color */
+    border-radius: 30px; /* Add a 30px border radius */
+    opacity: 0;
+    animation: fadeIn 1s ease-out forwards;
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    .react-calendar__tile {
+      color: white; /* Set text color to white */
+      border-radius: 0; /* Remove default border radius */
+      border-radius: 30px;
+    }
+
+    .react-calendar__tile--active {
+      background-color: ${calendarTheme.palette.secondary.main};
+      color: white;
+      border-radius: 30px;
+    }
+
+    .react-calendar__tile--now {
+      color: #FFFF;
+      background-color: #666; /* Set very light blue background color */
+      border-radius: 30px; /* Adjust border radius for the current day */
+    }
+    .react-calendar__tile--hover {
+      background-color: ${calendarTheme.palette.secondary.light}; /* Set light blue background color for hover state */
+    }
+    .react-calendar__navigation button {
+      background-color: ${calendarTheme.palette.secondary.main};
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      border-radius: 30px;
+    }
+
+    .react-calendar__navigation button:disabled {
+      background-color: #ddd;
+      color: #666;
+      cursor: not-allowed;
+    }
+  }
+`;
+
 export const PreviousWorkouts = () => {
     const [selectedDate, setSelectedDate] = useState(new Date());
     const [workoutData, setWorkoutData] = useState(null);
@@ -14,6 +93,9 @@ export const PreviousWorkouts = () => {
     const [user, setUser] = useState(null);
     console.log('Exercise Log component rendering...');
      console.log('User info:', displayName, email, uid);
+     
+    
+
 
      useEffect(() => {
       const auth = getAuth();
@@ -86,21 +168,20 @@ export const PreviousWorkouts = () => {
   };
 
   return (
-    <div className='container-calendar'>
-    <h1>Workout Calendar</h1>
-    <div className="calendar-container">
-      <Calendar onChange={handleDateChange} value={selectedDate} />
+    
+      <Container>
+        <CalendarHeader>Workout Calendar</CalendarHeader>
+        <CalendarContainer>
+          <StyledCalendar onChange={handleDateChange} value={selectedDate} />
 
-
-
-      {/* Conditional rendering of WorkoutLog_Card */}
-      {workoutData !== null ? (
-  <WorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
-   
-) : (
-  <p>No workout entered on this day</p>
-)}
-    </div>
-  </div>
-  )
-}
+          {/* Conditional rendering of WorkoutLog_Card */}
+          {workoutData !== null ? (
+            <WorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
+          ) : (
+            <p>No workout entered on this day</p>
+          )}
+        </CalendarContainer>
+      </Container>
+    
+  );
+};
