@@ -9,10 +9,13 @@ import { WorkoutLog_Card } from './WorkoutLog';
 import {styled} from '@mui/system';
 import  calendarTheme  from './CalendarTheme';  
 import { ThemeProvider } from '@mui/system';
-const Container = styled('div')`
+const StyledContainer = styled('div')`
   text-align: center;
   margin: 20px;
+  animation: slideInOut 0.5s ease-out;
+  background: '#8e44ad'; // Add slide-in/out animation
 `;
+
 
 const CalendarHeader = styled('h1')`
   background-color: ${calendarTheme.palette.primary.main};
@@ -83,6 +86,26 @@ const StyledCalendar = styled(Calendar)`
       cursor: not-allowed;
     }
   }
+`;
+
+const WorkoutContainer = styled('div')`
+  margin-top: 20px;
+`;
+
+const slideInOutAnimation = {
+  '0%': {
+    transform: 'translateY(-100%)', // Start position above the viewport
+    opacity: 0,
+  },
+  '100%': {
+    transform: 'translateY(0)', // End position at normal position
+    opacity: 1,
+  },
+};
+
+const StyledWorkoutLog_Card = styled(WorkoutLog_Card)`
+  animation: slideInOut 0.5s ease-out; // Add slide-in/out animation
+  
 `;
 
 export const PreviousWorkouts = () => {
@@ -167,21 +190,20 @@ export const PreviousWorkouts = () => {
     
   };
 
+ 
   return (
-    
-      <Container>
-        <CalendarHeader>Workout Calendar</CalendarHeader>
-        <CalendarContainer>
-          <StyledCalendar onChange={handleDateChange} value={selectedDate} />
-
-          {/* Conditional rendering of WorkoutLog_Card */}
+    <StyledContainer onAnimationEnd={() => console.log('Animation ended')}>
+      <CalendarHeader variant="h1">Workout Calendar</CalendarHeader>
+      <CalendarContainer>
+        <StyledCalendar onChange={handleDateChange} value={selectedDate} />
+        <WorkoutContainer>
           {workoutData !== null ? (
-            <WorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
+            <StyledWorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
           ) : (
             <p>No workout entered on this day</p>
           )}
-        </CalendarContainer>
-      </Container>
-    
+        </WorkoutContainer>
+      </CalendarContainer>
+    </StyledContainer>
   );
 };

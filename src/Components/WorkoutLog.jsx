@@ -1,100 +1,131 @@
-import React from 'react'
-import { useState,useEffect } from 'react'
-import cx from 'clsx';
-import {Button , Card, CardActionArea,Table,TableHead,TableRow,TableCell,TableBody,CardContent,CardHeader} from '@mui/material'
-// import { useContainedCardHeaderStyles } from '@mui-treasury/styles/cardHeader/contained';
-// import { useSoftRiseShadowStyles } from '@mui-treasury/styles/shadow/softRise';
-// import { useFadedShadowStyles } from '@mui-treasury/styles/shadow/faded';
+import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
+import { Card, CardContent, CardHeader, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+
+const Container = styled('div')({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  marginTop: '20px', // Adjust the margin as needed
+});
 
 
-const useStyles = styled(() => ({
-  card: {
-    marginTop: 40,
-    borderRadius:12,
-    transition: '0.3s',
-    width: '90%',
-    overflow: 'initial',
-    background: '#ffffff',
+const StyledCard = styled(Card)(({ theme }) => ({
+  marginTop: theme.spacing(1),
+  borderRadius: theme.spacing(1.5),
+  width: '125%', // Increase the width as needed
+  overflow: 'auto', // Enable overflow handling
+  background: '#8e44ad',
+  color: 'white',
+  fontWeight: 'bold',
+  animation: '$slideInOut 0.5s ease-out',
+  borderCollapse: 'collapse',
+}));
+
+const StyledCardContent = styled(CardContent)({
+  paddingTop: 0,
+  color: 'white',
+  fontWeight: 'bold',
+  textAlign: 'right',
+  '& table': {
+    width: '100%',
+    margin: 'auto',
+    borderCollapse: 'collapse',
+    padding: '8px', // Add padding to both ends
   },
-  content: {
-    paddingTop: 0,
-    textAlign: 'left',
-    overflowX: 'auto',
-    '& table': {
-      marginBottom: 0,
-    }
+  '& th, & td': {
+    padding: '8px', // Adjust the padding as needed
+    textAlign: 'center',
+    transition: 'background-color 0.3s',
+    cursor: 'pointer',
+    color: 'white',
+  },
+  '& td:hover, & th:hover': {
+    backgroundColor: '#3498db', // Change to your preferred hover color
+    borderRadius: '4px', // Adjust the border-radius as needed
+  },
+});
+
+const StyledTable = styled(Table)({
+  width: '100%',
+  
+  color: 'white',
+  fontWeight: 'bold',
+  borderCollapse: 'collapse',
+  '& th, & td': {
+    border: 'none',
+  },
+});
+const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
+  color: 'white',
+  '& .MuiCardHeader-subheader': {
+    color: 'white', // Set subheader color to white
+  },
+  '&:hover': {
+    backgroundColor: '#3498db',
+    borderRadius: '8px',
   },
 }));
 
+
 let id = 0;
-function createData(name,reps,sets,weight, rpe) {
+
+function createData(name, reps, sets, weight, rpe) {
   id += 1;
   return { id, name, reps, sets, weight, rpe };
 }
-//I want to loop through the workout data and create a row for each exercise 
-//I want to display the date at the top of the card
-//I want to display the workout data in a table
-//I want to display the total volume of the workout
-//I want to display the total sets of the workout
 
+export const WorkoutLog_Card = ({ workoutdata, selecteddate }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  const datestring = JSON.stringify(selecteddate);
+  const formatedate = datestring.slice(1, 11);
 
-export const WorkoutLog_Card = ({workoutdata,selecteddate}) => {
-  
-  const datestring = JSON.stringify(selecteddate)
-  const formatedate = datestring.slice(1,11)
+ 
+
   
 
-  const classes = useStyles();
-//   const cardHeaderStyles = useContainedCardHeaderStyles();
-//   const cardShadowStyles = useSoftRiseShadowStyles({ inactive: true });
-//   const cardHeaderShadowStyles = useFadedShadowStyles();
-
-    
   if (!Array.isArray(workoutdata)) {
     return <p>No workout data available for {formatedate}.</p>;
   }
+
   return (
-    <Card className={cx(classes.card)}>
-      <CardHeader
-        // className={cardHeaderShadowStyles.root}
-        // classes={cardHeaderStyles}
-        title={'Excersise Log'}
-        subheader={formatedate}
-      />
-      <CardContent className={classes.content}>
-        <Table>
+    <Container>
+    <StyledCard >
+    <StyledCardHeader title={'Exercise Log'} subheader={formatedate} />
+      <StyledCardContent>
+        <StyledTable>
           <TableHead>
             <TableRow>
-              <TableCell>Excersise</TableCell>
-              <TableCell align="right"> Reps</TableCell>
-              <TableCell align="right">Sets</TableCell>
-              <TableCell align="right"> Weight</TableCell>
-              <TableCell align="right">RPE</TableCell>
-              
+              <TableCell>Exercise</TableCell>
+              <TableCell align="left">Reps</TableCell>
+              <TableCell align="left">Sets</TableCell>
+              <TableCell align="left">Weight</TableCell>
+              <TableCell align="left">RPE</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {workoutdata.map((item, index) => {
-              const exercises = JSON.parse(item.exercises)
-              
-              return (
-                <React.Fragment key={index}>
-                {exercises.map((exercise, exerciseIndex) => (
-                  <TableRow key={exerciseIndex}>
-                    <TableCell align="right">{exercise.exercise}</TableCell>
-                    <TableCell align="right">{exercise.sets}</TableCell>
-                    <TableCell align="right">{exercise.reps}</TableCell>
-                    <TableCell align="right">{exercise.weight}</TableCell>
-                    <TableCell align="right">{exercise.rpe}</TableCell>
-                  </TableRow>
-                ))}
-              </React.Fragment>
-              );
-                })}
+            {
+              workoutdata.map((item, index) => {
+                const exercises = JSON.parse(item.exercises);
+
+                return (
+                  <React.Fragment key={index}>
+                    {exercises.map((exercise, exerciseIndex) => (
+                      <TableRow key={exerciseIndex}>
+                        <TableCell align="left">{exercise.exercise}</TableCell>
+                        <TableCell align="left">{exercise.sets}</TableCell>
+                        <TableCell align="leftt">{exercise.reps}</TableCell>
+                        <TableCell align="left">{exercise.weight}</TableCell>
+                        <TableCell align="left">{exercise.rpe}</TableCell>
+                      </TableRow>
+                    ))}
+                  </React.Fragment>
+                );
+              })}
           </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  )
-}
+        </StyledTable>
+      </StyledCardContent>
+    </StyledCard>
+    </Container>
+  );
+};

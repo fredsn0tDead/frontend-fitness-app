@@ -90,17 +90,14 @@ export const Dashboard = () => {
        onClick={() => {
         navigate('/exercise-log', { state: { displayName, email, uid } });
       }}
+      
     /> 
-        <SmallerERCard title='Previous Work Outs' image={IMG3} description='Reflect Back on your progress'
-       onClick={() => {
-        navigate('/previous-workouts', { state: { displayName, email, uid } });
-      }}/>
-        
+        <PreviousWorkouts/>
      
       </ActionButtonsContainer>
    
   </RootContainer>
-  <PreviousWorkouts/>
+  
   </>
   )
 }
