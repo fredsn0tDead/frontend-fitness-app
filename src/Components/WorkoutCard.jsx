@@ -10,9 +10,8 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { Box,Typography,Stack,Grid } from '@mui/material'
 import { WorkoutModal } from './WorkoutModal'
-import { Recomendationsmodal } from './Recomendationsmodal'
 import { RM } from './RM'
-export const WorkoutCard = ({title, description,img,excerise_array,excerise_description}) => {
+export const WorkoutCard = ({title, description,img,excerise_array,excerise_description,ExerciseNames}) => {
 
   const navigate = useNavigate()
 
@@ -36,38 +35,38 @@ export const WorkoutCard = ({title, description,img,excerise_array,excerise_desc
   
 
   return (
-    <Card sx={{maxWidth: 345}}>
-    <CardActionArea>
+    <Card sx={{ maxWidth: 345 , mb: 2}}>
+      <CardActionArea>
         <CardMedia
-        component={'img'}
-        height={'140'}
-        image={img}
-        alt={title}
+          component={'img'}
+          height={'140'}
+          image={img}
+          sx={{ objectFit: 'cover', height: '50%', overflow: 'hidden' }}
+          alt={title}
         />
         <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-        {title}
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-        {description}
-        </Typography>
-
+          <Typography gutterBottom variant="h5" component="div">
+            {title}
+          </Typography>
+          <Typography variant="body2">{description}</Typography>
         </CardContent>
-        <Button size="small" color="primary" onClick={openModal}>Learn More</Button>
-        <WorkoutModal
-        isOpen={isModalOpen}
-        handleClose={closeModal}
-        title={title}
-        description={description}
-      />
-        <Button size="small" color="primary" onClick={openRecomendation} >Recommendations</Button>
+        <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" p={2}>
+          <Button size="small" color="primary" variant="outlined" onClick={openModal}>
+            Learn More
+          </Button>
+          <Button size="small" color="primary" variant="outlined" onClick={openRecomendation}>
+            Recommendations
+          </Button>
+        </Stack>
+        <WorkoutModal isOpen={isModalOpen} handleClose={closeModal} title={title} description={description} />
         <RM
-        isOpen={isRecomendationOpen}
-        handleClose={closeRecomendation}
-        excerise_array={excerise_array}
-        excerise_description={excerise_description}
+          isOpen={isRecomendationOpen}
+          handleClose={closeRecomendation}
+          excerise_array={excerise_array}
+          excerise_description={excerise_description}
+          ExerciseNames={ExerciseNames}
         />
-    </CardActionArea>
+      </CardActionArea>
     </Card>
   )
-}
+};

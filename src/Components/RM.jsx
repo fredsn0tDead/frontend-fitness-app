@@ -1,8 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid ,Card} from '@mui/material';
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid ,Card,Typography} from '@mui/material';
 
-export const RM = ({ isOpen, handleClose ,excerise_array,excerise_description}) => {
+export const RM = ({ isOpen, handleClose ,excerise_array,excerise_description,ExerciseNames}) => {
   const [selectedGif, setSelectedGif] = useState(null);
 
   const handleGifClick = (index) => {
@@ -24,8 +24,12 @@ export const RM = ({ isOpen, handleClose ,excerise_array,excerise_description}) 
         <Grid container spacing={2}>
           {excerise_array.map((image, index) => (
             <Grid item xs={6} sm={4} md={3} key={index}>
-              <Card onClick={() => handleGifClick(index)}>
-                <img src={image} alt={`Image ${index + 1}`} style={{ maxWidth: '100%', cursor: 'pointer' }} />
+              <Card onClick={() => handleGifClick(index,image)}>
+                <img src={image.src} alt={`Image ${index + 1}`} style={{ maxWidth: '100%', cursor: 'pointer' }} />
+                
+                <Typography variant="subtitle1">
+                {image.name ? image.name : 'Exercise Name Not Available'}
+                </Typography>
               </Card>
             </Grid>
           ))}

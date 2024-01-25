@@ -10,7 +10,7 @@
 :root {
   --primary: #6a59ff;
   --white: #ffffff;
-  --bg:#808080;
+  --bg:#0080FE;
 }
 
 html {
@@ -56,7 +56,7 @@ html {
 
 body {
   font-size: 1.6rem;
-  background: var(--bg);
+  background: var(--white);
 }
 
 .container {
@@ -154,7 +154,7 @@ body {
 }
 
 .slider-controler .slider-arrow {
-  background: var(--white);
+  background: var(--blue);
   width: 3.5rem;
   height: 3.5rem;
   border-radius: 50%;

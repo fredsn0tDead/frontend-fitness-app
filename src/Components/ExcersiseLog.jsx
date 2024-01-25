@@ -7,7 +7,7 @@ import {TableBody} from '@mui/material';
 import {TableCell} from '@mui/material';
 import {TableHead} from '@mui/material';
 import {TableRow} from '@mui/material';
-import axios from 'axios'
+import axios from 'axios'; 
 import { useLocation } from 'react-router-dom';
 import { auth } from './firebase';
 import { useEffect } from 'react';

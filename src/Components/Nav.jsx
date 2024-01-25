@@ -9,7 +9,7 @@ export const Nav = ({isLoggedIn, onSignOut}) => {
     const navigate = useNavigate();
     return (
      
-      <AppBar position="static">
+      <AppBar position="static" >
           <Toolbar>
               <FitnessCenterIcon sx={{ mr: 2 }} />
               <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
