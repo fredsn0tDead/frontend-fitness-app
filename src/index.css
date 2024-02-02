@@ -9,7 +9,7 @@
 
 :root {
   --primary: #6a59ff;
-  --white: #ffffff;
+  --white: #FFFFFF	;
   --bg:#0080FE;
 }
 
@@ -105,6 +105,8 @@ body {
   height: 42rem;
   border-radius: 2rem;
   object-fit: cover;
+  border: 2px solid black;
+  
 }
 
 .swiper-slide-shadow-left,

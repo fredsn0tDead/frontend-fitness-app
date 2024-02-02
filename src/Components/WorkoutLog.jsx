@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
-import { Card, CardContent, CardHeader, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Button, Card, CardContent, CardHeader, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 const Container = styled('div')({
   display: 'flex',
@@ -75,7 +75,7 @@ function createData(name, reps, sets, weight, rpe) {
   return { id, name, reps, sets, weight, rpe };
 }
 
-export const WorkoutLog_Card = ({ workoutdata, selecteddate }) => {
+export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete }) => {
   const [isVisible, setIsVisible] = useState(true);
   const datestring = JSON.stringify(selecteddate);
   const formatedate = datestring.slice(1, 11);
@@ -117,6 +117,7 @@ export const WorkoutLog_Card = ({ workoutdata, selecteddate }) => {
                         <TableCell align="leftt">{exercise.reps}</TableCell>
                         <TableCell align="left">{exercise.weight}</TableCell>
                         <TableCell align="left">{exercise.rpe}</TableCell>
+                        <Button className='delete-button' variant="contained"onClick={() => onDelete(item._id)}>Delete</Button>
                       </TableRow>
                     ))}
                   </React.Fragment>

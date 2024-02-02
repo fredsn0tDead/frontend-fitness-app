@@ -6,7 +6,7 @@ export const fetchData = async (excersise) => {
     method: 'GET',
     url: apiurl,
     headers: {
-      'X-RapidAPI-Key': '873f799052mshcc0d8555425d6afp17f4fcjsnc6e6924e3f6e',
+      'X-RapidAPI-Key': '617226819dmshf904d7cf29b8ce4p1cd154jsn2ff03aff3d6f',
       'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
     }
   };

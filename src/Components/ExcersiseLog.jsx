@@ -11,14 +11,26 @@ import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { auth } from './firebase';
 import { useEffect } from 'react';
+import {padding, styled} from '@mui/system';
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; 
 export const ExcersiseLog = () => {
     const location = useLocation();
     const {displayName, email, uid} =  location.state || {};
     const [user, setUser] = useState(null);
+    const [submissionStatus, setSubmissionStatus] = useState(null);
+
     console.log('Exercise Log component rendering...');
      console.log('User info:', displayName, email, uid);
-     
+
+
+     const StyledH2 = styled("h2")(() => ({
+      fontFamily: "Fjalla One",
+      
+      color: "#141313",
+      margin: 0,
+    }));
+
+
     useEffect(() => {
       const auth = getAuth();
   
@@ -46,19 +58,21 @@ const handleSubmit = async (e) => {
     
     if (user && uid) {
       try {
-    
-      // Make a POST request to the Flask backend
-      await axios.post('http://127.0.0.1:5000/submit-form', jsonData, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `${await user.getIdToken()}`
+        // Make a POST request to the Flask backend
+        await axios.post('http://127.0.0.1:5000/submit-form', jsonData, {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `${await user.getIdToken()}`,
           },
-          });
-    } catch (error) {
-      console.error('Error storing data:', error);
-    } 
-  }
- } ;
+        });
+
+        setSubmissionStatus('success');
+      } catch (error) {
+        console.error('Error storing data:', error);
+        setSubmissionStatus('failure');
+      }
+    }
+  };
 
 
 
@@ -66,10 +80,18 @@ const addRow = () => {// Dynamically add rows to the table
     const newRow = {id:tableData.length+1,excerise:'',sets:'',reps:'',weight:'',rpe:''};
     setTableData([...tableData,newRow])
 }
-const removeRow = (id) => { // Dynamically remove rows from the table
-    const updatedData = tableData.filter((row) => row.id !== id);
-    setTableData(updatedData);
-  };
+const removeRow = (id) => {
+  // Check if there's only one row
+  if (tableData.length === 1) {
+    // Optionally display a message or handle the condition as needed
+    console.log('Cannot remove the last row.');
+    return;
+  }
+
+  // If there's more than one row, proceed with removal
+  const updatedData = tableData.filter((row) => row.id !== id);
+  setTableData(updatedData);
+};
   const handleInputChange = (id, field, value) => {
     const updatedData = tableData.map((row) =>
       row.id === id ? { ...row, [field]: value } : row
@@ -81,18 +103,18 @@ const removeRow = (id) => { // Dynamically remove rows from the table
     
     <div name='exerciselog'>
       
-  
-      <Button variant="outlined" onClick={addRow}>Add Row</Button>
+      <Box sx={{paddingTop: '10px' }} >
+    
       <form method='POST' onSubmit={handleSubmit}>
       <Table name='excersiselog'>
         <TableHead>
           <TableRow>
-            <TableCell>Exercise</TableCell>
-            <TableCell>Weight</TableCell>
-            <TableCell>Sets</TableCell>
-            <TableCell>Reps</TableCell>
-            <TableCell>RPE</TableCell>
-            
+            <TableCell><StyledH2>Exercise</StyledH2></TableCell>
+            <TableCell><StyledH2>Weight (Pounds)</StyledH2></TableCell>
+            <TableCell><StyledH2>Sets</StyledH2></TableCell>
+            <TableCell><StyledH2>Reps</StyledH2></TableCell>
+            <TableCell><StyledH2>RPE</StyledH2></TableCell>
+          
           </TableRow>
         </TableHead>
         <TableBody>
@@ -135,16 +157,30 @@ const removeRow = (id) => { // Dynamically remove rows from the table
                   value={row.rpe}
                   onChange={(e) => handleInputChange(row.id, 'rpe', e.target.value)}
                 />
+                
               </TableCell>
+              <TableCell>
+              <Button variant="outlined" onClick={addRow}>Add Row</Button>
+              </TableCell>
+
+              
               <TableCell>
                 <Button variant="contained" onClick={() => removeRow(row.id)}>Remove</Button>
               </TableCell>
+              
             </TableRow>
           ))}
         </TableBody>
-        <Button variant="contained" type='submit'>Save</Button>
+        <Button variant="contained" type='submit' style={{ marginLeft: '14px' }}  >Save</Button>
       </Table>
+     
       </form>
+      </Box>
+      {submissionStatus && (
+        <Typography color={submissionStatus === 'success' ? 'success' : 'error'}>
+          {submissionStatus === 'success' ? 'Workout saved successfully!' : 'Failed to save workout.'}
+        </Typography>
+      )}
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { WorkoutLog_Card } from './WorkoutLog';
 import {styled} from '@mui/system';
 import  calendarTheme  from './CalendarTheme';  
 import { ThemeProvider } from '@mui/system';
+import axios from 'axios';
 const StyledContainer = styled('div')`
   text-align: center;
   margin: 20px;
@@ -189,16 +190,32 @@ export const PreviousWorkouts = () => {
     return `${year}${month}${day}`;
     
   };
+  const handleDelete = async (entryId) => {
+    try {
+        // Make a DELETE request to the Flask backend
+        await axios.delete(`http://127.0.0.1:5000/delete_exercise_data/${entryId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `${await user.getIdToken(false)}`,
+            },
+        });
+
+        // Optionally, update the state or perform any other necessary actions
+        console.log('Exercise data deleted successfully!');
+    } catch (error) {
+        console.error('Error deleting exercise data:', error);
+    }
+};
 
  
   return (
     <StyledContainer onAnimationEnd={() => console.log('Animation ended')}>
-      <CalendarHeader variant="h1">Workout Calendar</CalendarHeader>
+      
       <CalendarContainer>
         <StyledCalendar onChange={handleDateChange} value={selectedDate} />
         <WorkoutContainer>
           {workoutData !== null ? (
-            <StyledWorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} />
+            <StyledWorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} onDelete={handleDelete}/>
           ) : (
             <p>No workout entered on this day</p>
           )}

@@ -2,6 +2,7 @@ import React from 'react'
 import{styled} from '@mui/material/styles'
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import {Link,useNavigate} from 'react-router-dom'
@@ -16,6 +17,13 @@ import { ER_Card } from '../Components/ER_Card';
 import { VideoBackground } from '../Components/VideoBackground';
 import videoSource from '../Assets/VideoBackground.mp4'
 import { PreviousWorkouts } from '../Components/PreviousWorkouts';
+// import  {CardGalaxy}  from '../mui-treasury/card-galaxy/CardGalaxy.tsx';//when importing 
+import {CardHighlight} from '../mui-treasury/card-highlight/CardHighlight.tsx'
+import {test} from '../mui-treasury/card-highlight/test.jsx'
+import image1 from '../Assets/Fitness_logo.png'
+import image2 from "../Assets/workout_log.jpg";
+import image3 from "../Assets/recommendations.jpg";
+import image4 from "../Assets/fitness_logo2.png";
 const RootContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',
@@ -27,7 +35,7 @@ const RootContainer = styled('div')({
   
 
   const ActionButtonsContainer = styled('div')({
-    display: 'flex',
+    display: 'table',
     justifyContent: 'space-between',
     marginTop: '16px', // Use the desired margin value
     '& > div': {
@@ -59,27 +67,61 @@ export const Dashboard = () => {
   return (
     <>
   
-  <VideoBackground>
+  {/* <VideoBackground>
         <video autoPlay muted loop>
           <source src={videoSource} type="video/mp4" autoPlay loop muted  />
           Your browser does not support the video tag.
         </video>
-      </VideoBackground>
+      </VideoBackground> */}
       
     {/* <Typography variant='h1' component='h1' style={{textAlign:'center', fontSize:'40px',fontWeight:'bold'}}>
       Welcome Back {displayName}!<br/>
       How can we help you today?
       </Typography>
        */}
-
-
+      
+    
 
     <RootContainer>
     
-      
-      
       <ActionButtonsContainer>
-        <SmallerERCard title='Excerise Recommendations' image={IMG3} description='Pick excerises that work best with your build'
+      <Grid wrap={"nowrap"} container spacing={4}>
+      <Grid item>
+          <CardHighlight 
+          color1 = "#5357ce"
+          brand1={'Excerise Workout Log'} 
+          backgorundImage1={image2} 
+          cover1 ={image1} 
+          description={ <>
+                    Track your fitness
+                    <br />Workout Plan
+                  </>}
+           onClick={() => {
+            navigate('/exercise-log', { state: { displayName, email, uid } });
+          }}
+                  />
+          
+    </Grid>
+
+    <Grid item>
+    <CardHighlight 
+          color1="#fc7944"
+          brand1={'Excerise Recommendations'} 
+          backgorundImage1={image3} 
+          cover1 ={image4} 
+          description={<>
+            Need Help 
+            <br /> Your Perfect Workout Plan 
+            <br/>is one click away
+          </>}
+          onClick={() => {
+            navigate('/recommender', { state: { displayName, email, uid } });
+          }}
+          />
+    </Grid>
+    
+    </Grid>
+        {/* <SmallerERCard title='Excerise Recommendations' image={IMG3} description='Pick excerises that work best with your build'
         onClick={() => {
           navigate('/recommender', { state: { displayName, email, uid } });
         }}/>
@@ -92,8 +134,8 @@ export const Dashboard = () => {
       }}
       
     /> 
-        <PreviousWorkouts/>
-     
+  */}
+     <PreviousWorkouts/>
       </ActionButtonsContainer>
    
   </RootContainer>

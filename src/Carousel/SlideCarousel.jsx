@@ -30,12 +30,12 @@ const excersiselist = [
 
 export const SlideCarousel = () => {
     const [exercise, setExercise] = useState([]);
-
+    const [searchTerm, setSearchTerm] = useState('');
     useEffect(() => {
       // Define the async function inside useEffect and call it immediately
       const getExercise = async () => {
         try {
-          const response = await fetchData(excersiselist[1].name);
+          const response = await fetchData(excersiselist[0].name);
           setExercise(response);
           console.log(exercise);
         } catch (error) {
@@ -50,10 +50,29 @@ export const SlideCarousel = () => {
     
     const slicedExercise = exercise.slice(0, 7);
     
+    const handleInputChange = (e) => {
+      setSearchTerm(e.target.value);
+    };
+    const handleSearch = async (e) => {
+      if (e.key === 'Enter') {
+        try {
+          const response = await fetchData(searchTerm);
+          setExercise(response);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
     return (
         <div className="container">
           <Animation text="Build a Workout plan that suits your build" delay={100}   />
-       
+          <input
+        type="text"
+        placeholder="Search for exercise..."
+        value={searchTerm}
+        onChange={handleInputChange}
+        onKeyDown={handleSearch}
+      />
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
