@@ -1,70 +1,57 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# FITF0RM
 
-## Available Scripts
+## Your one stop shop that simplies the beginner process
 
-In the project directory, you can run:
+Welcome to my Fitness Application designed specifically for beginners who are just starting their fitness journey. This application aims to provide users with personalized fitness recommendations, exercise demonstrations, and helpful resources to kickstart their fitness routine.
 
-### `npm start`
+## Technologies Used
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+This application is built using the following technologies:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Frontend: React
+- Backend: Flask
+- Authentication: Firebase
 
-### `npm test`
+## Features
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Personalized Fitness Recommendations
+ 
+Our application provides personalized fitness recommendations tailored to the user's fitness level and goals. Users can input their preferences and fitness objectives, and the application will generate a customized workout plan.
 
-### `npm run build`
+### Exercise Demonstrations
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+The application integrates with a RESTful API to retrieve the best exercise GIFs for users. These GIFs serve as visual demonstrations for various exercises, making it easier for beginners to learn proper form and technique.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### User Authentication 
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
+To get started with our Fitness Application, follow these steps:
 
-### `npm run eject`
+Clone the repository to your local machine.
+Navigate to the frontend directory and run npm install to install the necessary dependencies.
+Navigate to the backend directory and set up the Flask environment. Install the required packages using pip install -r requirements.txt.
+Configure Firebase authentication by setting up a Firebase project and obtaining the necessary credentials.
+Start the backend server by running python app.py.
+Start the frontend development server by running npm start.
+Access the application in your web browser at http://localhost:3000.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Demo
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Click here to watch the demo
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Contributing
+We welcome contributions from the community to help improve our Fitness Application. If you have any suggestions, feature requests, or bug reports, please feel free to submit a pull request or open an issue on GitHub.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Learn More
+## Contact
+If you have any questions or inquiries, please contact us at frederick.tetteh@ontariotechu.net. We'd love to hear from you!
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+Thank you for choosing our Fitness Application. Let's embark on this fitness journey together! 🏋️‍♂️💪
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
