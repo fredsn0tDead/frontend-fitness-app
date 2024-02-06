@@ -38,7 +38,7 @@ Access the application in your web browser at http://localhost:3000.
 
 ## Demo
 
-Click here to watch the demo
+![alt text]([http://url/to/img.png](https://github.com/fredsn0tDead/frontend-fitness-app/blob/master/Github4.png)
 
 ## Contributing
 We welcome contributions from the community to help improve our Fitness Application. If you have any suggestions, feature requests, or bug reports, please feel free to submit a pull request or open an issue on GitHub.
