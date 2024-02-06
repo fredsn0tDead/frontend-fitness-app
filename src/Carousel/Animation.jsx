@@ -16,6 +16,6 @@ export const Animation = ({text, delay}) => {
         }
       }, [currentIndex, delay, text]);
 
-  return <div className='heading'>{currentText}</div>;
+  return <div className='heading'> <span>{currentText}</span></div>;
   
 }

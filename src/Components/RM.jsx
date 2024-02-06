@@ -27,7 +27,7 @@ export const RM = ({ isOpen, handleClose ,excerise_array,excerise_description,Ex
               <Card onClick={() => handleGifClick(index,image)}>
                 <img src={image.src} alt={`Image ${index + 1}`} style={{ maxWidth: '100%', cursor: 'pointer' }} />
                 
-                <Typography variant="subtitle1">
+                <Typography variant="subtitle1"  sx={{fontFamily: 'Fjalla One',textAlign:'center', fontWeight:'bold'}}>
                 {image.name ? image.name : 'Exercise Name Not Available'}
                 </Typography>
               </Card>

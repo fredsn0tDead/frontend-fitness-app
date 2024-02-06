@@ -12,7 +12,7 @@ export const Nav = ({isLoggedIn, onSignOut}) => {
       <AppBar position="static" >
           <Toolbar>
               <FitnessCenterIcon sx={{ mr: 2 }} />
-              <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+              <Typography variant="h6" component="div" sx={{ flexGrow: 1 ,fontFamily: "Fjalla One"}}>
               FORMFIT 
               </Typography>
               {isLoggedIn ? (

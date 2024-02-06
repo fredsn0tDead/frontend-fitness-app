@@ -11,7 +11,9 @@ import { useState } from 'react'
 import { Box,Typography,Stack,Grid } from '@mui/material'
 import { WorkoutModal } from './WorkoutModal'
 import { RM } from './RM'
+import { padding } from '@mui/system'
 export const WorkoutCard = ({title, description,img,excerise_array,excerise_description,ExerciseNames}) => {
+
 
   const navigate = useNavigate()
 
@@ -35,8 +37,8 @@ export const WorkoutCard = ({title, description,img,excerise_array,excerise_desc
   
 
   return (
-    <Card sx={{ maxWidth: 345 , mb: 2}}>
-      <CardActionArea>
+    <Card sx={{ maxWidth: 345 , mb: 2,}}>
+      <CardActionArea  sx={{fontFamily: 'Fjalla One'}}>
         <CardMedia
           component={'img'}
           height={'140'}
@@ -44,20 +46,44 @@ export const WorkoutCard = ({title, description,img,excerise_array,excerise_desc
           sx={{ objectFit: 'cover', height: '50%', overflow: 'hidden' }}
           alt={title}
         />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
+        <CardContent >
+          <Typography gutterBottom variant="h5" component="div" sx={{fontFamily: 'Fjalla One',}} >
             {title}
           </Typography>
-          <Typography variant="body2">{description}</Typography>
+          <Typography variant="body2" sx={{ fontFamily: 'Fjalla One', fontSize: '10px', display: { xs: 'none', sm: 'none', md: 'block' } }}>
+        {description}
+      </Typography>
         </CardContent>
-        <Stack spacing={2} direction="row" justifyContent="center" alignItems="center" p={2}>
-          <Button size="small" color="primary" variant="outlined" onClick={openModal}>
-            Learn More
-          </Button>
-          <Button size="small" color="primary" variant="outlined" onClick={openRecomendation}>
-            Recommendations
-          </Button>
-        </Stack>
+        <Stack 
+  spacing={2} 
+  direction={{ xs: 'column', md: 'row' }} // Change direction to column on medium screens
+  justifyContent="center" 
+  alignItems="center" 
+  p={2} 
+  sx={{
+    width: '100%',
+  }}
+>
+  <Button 
+    size="small" 
+    color="primary" 
+    variant="outlined" 
+    onClick={openModal}
+    sx={{ marginBottom: { xs: 2, md: 0 }, marginRight: { xs: 0, md: 2 } }} // Adjust margin for buttons based on screen size
+  >
+    Learn More
+  </Button>
+  <Button 
+    size="small" 
+    color="primary" 
+    variant="outlined" 
+    onClick={openRecomendation} 
+    sx={{ marginBottom: { xs: 2, md: 0 }, marginRight: { xs: 0, md: 2 }}} // Adjust margin for buttons based on screen size
+  >
+    Recommendations
+  </Button>
+</Stack>
+
         <WorkoutModal isOpen={isModalOpen} handleClose={closeModal} title={title} description={description} />
         <RM
           isOpen={isRecomendationOpen}

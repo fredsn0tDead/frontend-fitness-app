@@ -1,7 +1,7 @@
 import React from 'react'
 import { useState,useEffect } from 'react'
 import {Swiper, SwiperSlide} from 'swiper/react'   
-
+import {styled} from '@mui/system';
 import'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -27,6 +27,22 @@ const excersiselist = [
 
 
 ]
+const StyledExerciseNameContainer = styled('div')`
+  text-align: center;
+`;
+  
+const Styledheader = styled('span')`
+  font-family: 'Fjalla One';
+  color: #ffff;
+  margin: 0;
+  padding: 5px;
+  background-color: #8e44ad;
+  border-radius: 90px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  
+  `;
+  
 
 export const SlideCarousel = () => {
     const [exercise, setExercise] = useState([]);
@@ -65,7 +81,7 @@ export const SlideCarousel = () => {
     };
     return (
         <div className="container">
-          <Animation text="Build a Workout plan that suits your build" delay={100}   />
+          <Animation text="Build a Workout plan that suits your build" delay={100} />
           <input
         type="text"
         placeholder="Search for exercise..."
@@ -99,7 +115,7 @@ export const SlideCarousel = () => {
               <SwiperSlide>
                 {/* <ExcersiseCard giflink= {da ta.equipment}/> */}
                 <img src={data.gifUrl}  loading ="lazy" />
-                <p key={data.id}>{data.name.toUpperCase()} </p>
+                <StyledExerciseNameContainer><Styledheader  key={data.id}>{data.name.toUpperCase()} </Styledheader></StyledExerciseNameContainer>
               </SwiperSlide>
             ))
           }

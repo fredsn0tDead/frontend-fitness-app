@@ -85,7 +85,11 @@ export const Dashboard = () => {
     <RootContainer>
     
       <ActionButtonsContainer>
-      <Grid wrap={"nowrap"} container spacing={4}>
+      <Grid wrap={"nowrap"} container spacing={4}   sx={{
+    '@media (max-width: 960px)': {
+      flexDirection: 'column',alignItems: 'center', // Change direction to column on medium screens
+    },
+  }} >
       <Grid item>
           <CardHighlight 
           color1 = "#5357ce"

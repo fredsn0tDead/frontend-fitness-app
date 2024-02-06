@@ -38,6 +38,9 @@ const StyledRoot = styled("div")<{ color?: string }>(
         boxShadow: "0 6px 20px 0 rgba(0,0,0,0.38)",
       },
     },
+    "@media (max-width: 960px)": { // Media query for medium screens
+      minWidth: 280, // Adjust minimum width for medium screens
+    },
   })
 );
 

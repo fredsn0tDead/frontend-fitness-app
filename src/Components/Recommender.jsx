@@ -72,6 +72,8 @@ console.log('Short Torso Exercise Names:', shorttorsoExerciseNames);
 console.log('Short Torso Exercise Names:', shorttorso);
 
 const useStyles = styled((theme) => ({
+  
+  
   button: {
     backgroundColor: 'white', // Initial background color
     transition: 'background-color 0.9 s ease', // Add a smooth transition for the background-color property
@@ -145,6 +147,7 @@ export const Recommender = () => {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        fontFamily: 'Fjalla One',
       }}>
         <ThemeProvider theme={theme}>
         <Box className={classes.button}  sx={{
@@ -160,9 +163,10 @@ export const Recommender = () => {
           textAlign: 'center',
           fontSize: '0.875rem',
           fontWeight: '700',
+          
 
         }}>
-          <Typography variant="h3">
+          <Typography variant="h3" sx={{fontFamily: 'Fjalla One',}}>
          Having Trouble Creating a Workout plan? We Got You Covered   </Typography>
          
         <Typography variant="h5"></Typography>
@@ -185,7 +189,7 @@ export const Recommender = () => {
           fontWeight: '700',
 
         }}>
-        <Typography variant="h5">
+        <Typography variant="h5" sx={{fontFamily: 'Fjalla One'}}>
     Please Select Which Image best represents your anatomy
 
     </Typography>
@@ -194,7 +198,7 @@ export const Recommender = () => {
         </Box>
         </ThemeProvider>
     
-    <Grid container spacing={2} pt={3.4} pl={2} pr={2}>
+    <Grid container spacing={2} pt={3.4} pl={2} pr={2} >
     {/* {longtorso.map((gif, index) => (
           <Grid item xs={4} key={index}>
             <WorkoutCard

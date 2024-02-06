@@ -23,8 +23,18 @@ const CalendarHeader = styled('h1')`
   color: white;
   padding: 10px;
   font-size: 24px;
+  
 `;
-
+const Styledheader = styled('p')`
+  font-family: 'Fjalla One';
+  color: #FFF;
+  margin: 0;
+  padding: 20px;
+  background-color: #8e44ad;
+  border-radius: 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  animation: slideInOut 0.5s ease-out;
+  `;
 
 
 const CalendarContainer = styled('div')`
@@ -43,6 +53,7 @@ const StyledCalendar = styled(Calendar)`
     border-radius: 30px; /* Add a 30px border radius */
     opacity: 0;
     animation: fadeIn 1s ease-out forwards;
+    font-family: 'Fjalla One';
 
     @keyframes fadeIn {
       from {
@@ -52,10 +63,12 @@ const StyledCalendar = styled(Calendar)`
         opacity: 1;
       }
     }
+  
     .react-calendar__tile {
       color: white; /* Set text color to white */
       border-radius: 0; /* Remove default border radius */
       border-radius: 30px;
+      font-family: 'Fjalla One';
     }
 
     .react-calendar__tile--active {
@@ -80,7 +93,7 @@ const StyledCalendar = styled(Calendar)`
       cursor: pointer;
       border-radius: 30px;
     }
-
+    
     .react-calendar__navigation button:disabled {
       background-color: #ddd;
       color: #666;
@@ -217,7 +230,7 @@ export const PreviousWorkouts = () => {
           {workoutData !== null ? (
             <StyledWorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} onDelete={handleDelete}/>
           ) : (
-            <p>No workout entered on this day</p>
+            <Styledheader>You have not entered any workouts on this day</Styledheader>
           )}
         </WorkoutContainer>
       </CalendarContainer>
