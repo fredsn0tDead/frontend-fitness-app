@@ -24,6 +24,7 @@ import image1 from '../Assets/Fitness_logo.png'
 import image2 from "../Assets/workout_log.jpg";
 import image3 from "../Assets/recommendations.jpg";
 import image4 from "../Assets/fitness_logo2.png";
+import { Profile } from '../Components/Profile.jsx';
 const RootContainer = styled('div')({
     display: 'flex',
     flexDirection: 'column',
@@ -66,7 +67,7 @@ export const Dashboard = () => {
   });
   return (
     <>
-  
+   <Profile/>
   {/* <VideoBackground>
         <video autoPlay muted loop>
           <source src={videoSource} type="video/mp4" autoPlay loop muted  />
@@ -81,7 +82,7 @@ export const Dashboard = () => {
        */}
       
     
-
+    <Typography variant='h1' component='h1' style={{textAlign:'center', fontSize:'40px',fontWeight:'bold'}}>Welcome Back {displayName}! </Typography>
     <RootContainer>
     
       <ActionButtonsContainer>

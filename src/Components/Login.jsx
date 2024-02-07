@@ -22,7 +22,7 @@ export const Login = ({onLogin}) => {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const [error, setError] = useState(null);
     const handleSubmit = (e) => {
       e.preventDefault();
       signInWithEmailAndPassword(auth, email, password)
@@ -30,12 +30,16 @@ export const Login = ({onLogin}) => {
           // Signed in
           const { displayName, email, uid } = userCredential.user;
           navigate("/dashboard",{ state: {  displayName, email, uid } })
+          onLogin({ displayName, email, uid });
           console.log(displayName, email, uid );
+          setError(null);
       })
       .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          // const errorCode = error.code;
+          // const errorMessage = error.message;
+          // console.log(errorCode, errorMessage)
+          setError('Invalid username or password.');
+          console.error('Error signing in:', error);
       });
       const isLoggedIn = true;
       onLogin(isLoggedIn);
@@ -95,6 +99,7 @@ export const Login = ({onLogin}) => {
           >
             Sign In
           </Button>
+          {error && <p>{error}</p>}
           <Grid container>
             <Grid item xs>
               <NavLink to="/forgotpassword" variant="body2">

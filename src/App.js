@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 
 import { Route, Routes ,BrowserRouter, useLocation} from 'react-router-dom';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { ExcersiseLog } from './Components/ExcersiseLog';
 import { Homepage } from './pages/Homepage';
 import { Nav } from './Components/Nav';
@@ -17,14 +17,23 @@ import { Excerise_store } from './Components/Excerise_store';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  
+  useEffect(() => {
+    // Check local storage for user authentication state upon app initialization
+    const storedLoggedInStatus = localStorage.getItem('isLoggedIn');
+    if (storedLoggedInStatus) {
+      setIsLoggedIn(JSON.parse(storedLoggedInStatus));
+    }
+  }, []);
+
   const handleLogin = (loggedIn) => {
     setIsLoggedIn(loggedIn);
+     // Store user's logged-in status in local storage upon successful login
+     localStorage.setItem('isLoggedIn', true);
     
   };
   const handleSignOut = () => {
     // Handle sign out logic here
-
+    localStorage.removeItem('isLoggedIn');
     setIsLoggedIn(false);
   };
 
