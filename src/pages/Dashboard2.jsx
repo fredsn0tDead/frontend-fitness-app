@@ -53,7 +53,7 @@ const RootContainer = styled('div')({
   // used to search for older workouts create a new workout and view your progress
   //should be able to output a graph of your progress
   
-export const Dashboard = ({ showProfile,toggleProfile }) => {
+export const Dashboard = ({ showProfile }) => {
     // const location = useLocation();
   // const { displayName, email, uid } = location.state || {};
   
@@ -139,10 +139,11 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
        
   
      <PreviousWorkouts/>
+     {showProfile && <Profile showProfile={showProfile} onDisplayNameUpdate={handleDisplayNameUpdate} />}
+
       </ActionButtonsContainer>
    
   </RootContainer>
-  {showProfile && <Profile showProfile={showProfile} toggleProfile={toggleProfile} onDisplayNameUpdate={handleDisplayNameUpdate} />}
 
   </>
   )

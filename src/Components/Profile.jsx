@@ -6,14 +6,16 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { getAuth } from 'firebase/auth';
+import { useEffect } from 'react';
 
-export const Profile = () => {
-    const [displayName, setDisplayName] = useState(auth.currentUser.displayName);
+export const Profile = ({ onDisplayNameUpdate,showProfile,toggleProfile }) => {
+    const [newDisplayName, setNewDisplayName] = useState(auth.currentUser.displayName || "");
     const [profilePicture, setProfilePicture] = useState(null);
     const [error, setError] = useState(null);
 
     const handleDisplayNameChange = (e) => {
-        setDisplayName(e.target.value);
+        setNewDisplayName(e.target.value);
     };
 
     const handleProfilePictureChange = (e) => {
@@ -25,8 +27,11 @@ export const Profile = () => {
         e.preventDefault();
         try {
             // Update the display name
-            await updateProfile(auth.currentUser, { displayName });
+                await updateProfile(auth.currentUser, { displayName: newDisplayName });
+            // Update the local state with the new displayName
+            onDisplayNameUpdate(newDisplayName);
             // Update the profile picture if provided
+            toggleProfile()
             if (profilePicture) {
                 // Logic to upload the profile picture to storage and update the user's profile
                 // Replace this with your actual logic
@@ -36,11 +41,31 @@ export const Profile = () => {
         } catch (error) {
             setError('Error updating profile: ' + error.message);
         }
+       
     };
-
+    
     return (
-        <Card>
-            <CardContent>
+<Card
+            sx={{
+                position: 'fixed',
+                right: -15,
+                top: 50,
+                width: '300px',
+                margin: '20px',
+                zIndex: 1000, // Adjust the z-index value as needed
+
+                // Media queries for responsiveness
+                '@media (max-width: 600px)': {
+                    width: '40%', // Adjust the width for smaller screens
+                    right: 0, // Adjust the positioning for smaller screens
+                    margin: '10px', // Adjust the margin for smaller screens
+                    right:115,
+                },
+                '@media (min-width: 600px) and (max-width: 960px)': {
+                    width: '60%', // Adjust the width for medium screens
+                },
+            }}
+        >            <CardContent>
                 <Typography variant="h5" component="h2">
                     Edit Profile
                 </Typography>
@@ -48,7 +73,7 @@ export const Profile = () => {
                     <TextField
                         label="Display Name"
                         variant="outlined"
-                        value={displayName}
+                        value={newDisplayName}
                         onChange={handleDisplayNameChange}
                         fullWidth
                         margin="normal"
@@ -60,7 +85,6 @@ export const Profile = () => {
                         type="file"
                         onChange={handleProfilePictureChange}
                     />
-                    
                     <Button type="submit" variant="contained" color="primary">
                         Save Changes
                     </Button>
