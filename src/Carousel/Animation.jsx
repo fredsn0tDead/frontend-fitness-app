@@ -1,5 +1,8 @@
 import React from 'react'
 import  { useState, useEffect } from 'react';
+import { Typography } from '@mui/material/styles/createTypography';
+
+
 
 export const Animation = ({text, delay}) => {
     const [currentText, setCurrentText] = useState('');

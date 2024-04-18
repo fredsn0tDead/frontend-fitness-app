@@ -105,7 +105,7 @@ const StyledDivTeam = styled("div")(({ theme }) => ({
 
 const StyledDivDate = styled("div")(({ theme }) => ({
   fontFamily: "Sen",
-  color: "#fff",
+  color: "#42a5f5",
   backgroundColor: theme.palette.text.disabled,
   opacity: 0.72,
   fontSize: "0.75rem",

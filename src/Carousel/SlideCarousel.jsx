@@ -9,6 +9,8 @@ import { Animation } from './Animation'
 import { fetchData } from '../utils/fetch'
 import { exerciseData } from '../utils/fetch'
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
+import { Typography,TextField,Box } from '@mui/material';
+
 
 const excersiselist = [
     {
@@ -29,15 +31,15 @@ const excersiselist = [
 ]
 const StyledExerciseNameContainer = styled('div')`
   text-align: center;
+  font-size: x-small;
 `;
   
 const Styledheader = styled('span')`
   font-family: 'Fjalla One';
-  color: #ffff;
+  color: #000;
   margin: 0;
   padding: 5px;
-  background-color: #8e44ad;
-  border-radius: 90px;
+  border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   text-align: center;
   
@@ -82,13 +84,30 @@ export const SlideCarousel = () => {
     return (
         <div className="container">
           <Animation text="Build a Workout plan that suits your build" delay={100} />
-          <input
-        type="text"
-        placeholder="Search for exercise..."
-        value={searchTerm}
-        onChange={handleInputChange}
-        onKeyDown={handleSearch}
-      />
+      <Box sx={{ 
+          display: 'flex', // Ensure the Box uses flexbox layout
+          flexDirection: 'column', // Arrange children in a column
+          alignItems: 'center', // Center children along the cross-axis (horizontally for a column layout)
+          justifyContent: 'center', // Center children along the main axis (vertically for a column layout)
+    }}>
+    <Typography variant="h6" component="h2" gutterBottom color='#0000' >
+       <div className='subheading' ><span>Discover new variations from our database of exercises</span> </div> 
+      </Typography>
+      <TextField 
+            style={{marginTop:'5px'}}
+            margin="normal"
+            required
+            
+            id="search"
+            label="Search"
+            placeholder='Search for exercise...'
+            name="email"
+            autoComplete="email"
+            autoFocus
+            onChange={handleInputChange}
+            onKeyDown={handleSearch}
+          />
+      </Box>
           <Swiper
             effect={'coverflow'}
             grabCursor={true}
@@ -127,7 +146,7 @@ export const SlideCarousel = () => {
               <div className="swiper-button-next slider-arrow">
                 <ion-icon name="arrow-forward-outline"></ion-icon>
               </div>
-              <div className="swiper-pagination"></div>
+              {/* <div className="swiper-pagination"></div> */}
             </div>
           </Swiper>
           

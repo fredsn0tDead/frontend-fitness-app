@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   Stack,
+  Autocomplete,
 } from '@mui/material';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
@@ -17,12 +18,36 @@ import { auth } from './firebase';
 import { useEffect } from 'react';
 import { styled } from '@mui/system';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { fetchExcercises } from '../utils/fetch_';
 
 export const ExcersiseLog = () => {
  const location = useLocation();
+  const excerNames = require('./exercise_names_C.json');
   const { displayName, email, uid } = location.state || {};
   const [user, setUser] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState(null);
+  const [exerciseNames, setExerciseNames] = useState(excerNames);
+
+  // useEffect(() => {
+  //   const loadExerciseNames = async () => {
+  //     try {
+  //       const response = await fetch('Movie.json');
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! status: ${response.status}`);
+  //       }
+        
+  //       const data = await response.json();
+  //       setExerciseNames(data);
+  //       console.log('Exercise Names:', data);
+  //       console.log('Exercise Names:', exerciseNames);
+  //     } catch (error) {
+  //       console.error('Error loading exercise names:', error);
+  //     }
+  //   };
+  //   console.log('Excersise Names',exerciseNames)
+  //   loadExerciseNames();
+  // }, []);
+ 
 
   console.log('Exercise Log component rendering...');
   console.log('User info:', displayName, email, uid);
@@ -38,6 +63,7 @@ export const ExcersiseLog = () => {
     fontFamily: 'Fjalla One',
     color: '#141313',
     margin: 0,
+    marginLeft:0,
   }));
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -49,6 +75,7 @@ export const ExcersiseLog = () => {
     },
     [theme.breakpoints.up('md')]: {
       marginBottom: '10px', // Add margin between textfields
+      marginRight: '0px', // Add margin between textfields
     },
   }));
 
@@ -59,13 +86,25 @@ export const ExcersiseLog = () => {
       marginTop: '20px',
     },
     [theme.breakpoints.up('md')]: {
-      width: '80%', // Reduce the width for larger screens
-      marginRight: '10px', // Add space between textfields
+      width: '90%', // Reduce the width for larger screens
+      marginRight: '0px', // Add space between textfields
       marginBottom: '20px',
       marginTop: '20px',
     },
   }));
-
+const StyledAutoField = styled(Autocomplete)(({ theme }) => ({  
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
+      marginBottom: '20px',
+      marginTop: '20px',
+    },
+    [theme.breakpoints.up('md')]: {
+      width: '100%', // Reduce the width for larger screens
+      marginRight: '0px', // Add space between textfields
+      marginBottom: '20px',
+      marginTop: '20px',
+    },
+  }));
   useEffect(() => {
     const auth = getAuth();
 
@@ -84,7 +123,7 @@ export const ExcersiseLog = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     const jsonData = JSON.stringify(tableData);
 
     if (user && uid) {
@@ -133,21 +172,31 @@ export const ExcersiseLog = () => {
               <TableHead>
                 <TableRow>
                   <StyledTableCell>
-                    <Stack direction="column" alignItems="flex-start">
+                    <Stack direction="column" alignItems="flex-start" marginLeft='240px'>
                       <StyledH2>Exercise</StyledH2>
                       {tableData.map((row) => (
-                        <StyledTextField
-                          key={`exercise-${row.id}`}
-                          name="exercise"
-                          value={row.exercise}
-                          onChange={(e) => handleInputChange(row.id, 'exercise', e.target.value)}
-                        />
+                        <StyledAutoField
+                        freeSolo // Allow typing values not in options
+                        options={exerciseNames.excerNames.map(name=>name.toUpperCase())}//added excerNames allows me to access the values from th key excerNames
+                        autoHighlight  
+                        key={`exercise-${row.id}`}
+                        name="exercise"
+                        value={row.exercise}
+                        onChange={(event, value) => {
+                          handleInputChange(row.id, 'exercise', value); 
+                        }}
+                        
+                        renderInput={(params) => (
+                          <TextField {...params} label="Search Exercises" 
+                          />
+                        )}
+                      />
                       ))}
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell>
                     <Stack direction="column" alignItems="flex-start">
-                      <StyledH2>Weight (Pounds)</StyledH2>
+                      <StyledH2>Weight (Ibs)</StyledH2>
                       {tableData.map((row) => (
                         <StyledTextField
                           key={`weight-${row.id}`}
@@ -202,13 +251,13 @@ export const ExcersiseLog = () => {
                   </StyledTableCell>
                   <StyledTableCell>
                     <Stack direction="column" alignItems="flex-start">
-                      <Button variant="outlined" onClick={addRow}>
+                      <Button variant="outlined" onClick={addRow} style={{marginTop:10}}>
                         Add Row
                       </Button>
                     </Stack>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <Stack direction="column" alignItems="flex-start">
+                    <Stack direction="column" alignItems="flex-start" style={{marginTop:10}}>
                       <Button variant="contained" onClick={() => removeRow(tableData.length)}>
                         Remove
                       </Button>
@@ -219,8 +268,8 @@ export const ExcersiseLog = () => {
               <TableBody>
                 <TableRow>
                   <StyledTableCell>
-                    <Button variant="contained" type="submit" style={{ marginLeft: '1px' }}>
-                      Save
+                    <Button variant="contained" type="submit" style={{ marginLeft: '0px',marginLeft:'240px' }}>
+                      Record
                     </Button>
                   </StyledTableCell>
                 </TableRow>

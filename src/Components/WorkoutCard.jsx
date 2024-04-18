@@ -12,7 +12,8 @@ import { Box,Typography,Stack,Grid } from '@mui/material'
 import { WorkoutModal } from './WorkoutModal'
 import { RM } from './RM'
 import { padding } from '@mui/system'
-export const WorkoutCard = ({title, description,img,excerise_array,excerise_description,ExerciseNames}) => {
+export const WorkoutCard = ({title, description,img,excerise_array,excerise_description,ExerciseNames,TP,MP,BP,learn_more_description,
+header,headline,main_description,bolded_description}) => {
 
 
   const navigate = useNavigate()
@@ -37,7 +38,7 @@ export const WorkoutCard = ({title, description,img,excerise_array,excerise_desc
   
 
   return (
-    <Card sx={{ maxWidth: 345 , mb: 2,}}>
+    <Card sx={{ maxWidth: 345 , mb: 2,textAlign:'center'}}>
       <CardActionArea  sx={{fontFamily: 'Fjalla One'}}>
         <CardMedia
           component={'img'}
@@ -78,19 +79,37 @@ export const WorkoutCard = ({title, description,img,excerise_array,excerise_desc
     color="primary" 
     variant="outlined" 
     onClick={openRecomendation} 
-    sx={{ marginBottom: { xs: 2, md: 0 }, marginRight: { xs: 0, md: 2 }}} // Adjust margin for buttons based on screen size
+    sx={{ marginBottom: { xs: 0, md: 2 }, marginRight: { xs:0, md: 2 }}} // Adjust margin for buttons based on screen size
   >
-    Recommendations
+    Fitness Plan
   </Button>
 </Stack>
 
-        <WorkoutModal isOpen={isModalOpen} handleClose={closeModal} title={title} description={description} />
+        <WorkoutModal isOpen={isModalOpen}
+         handleClose={closeModal} 
+         title={title} 
+         description={description}
+         TP={TP}
+          MP={MP}
+          BP={BP}
+          learn_more_description={learn_more_description}
+          header={header}
+          headline={headline}
+          main_description={main_description}
+          bolded_description={bolded_description}
+ />
         <RM
           isOpen={isRecomendationOpen}
           handleClose={closeRecomendation}
           excerise_array={excerise_array}
           excerise_description={excerise_description}
           ExerciseNames={ExerciseNames}
+          TP={TP}
+          MP={MP}
+          BP={BP}
+          learn_more_description={learn_more_description}
+          
+
         />
       </CardActionArea>
     </Card>

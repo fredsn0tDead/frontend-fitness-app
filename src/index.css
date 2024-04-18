@@ -36,6 +36,19 @@ html {
   }
 }
 
+@font-face {
+  font-family: 'Cooper Hewitt';
+  src: url('./fonts/CooperHewitt-Heavy.woff') format('woff');
+  font-weight: 800; /* Heavy */
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cooper Hewitt';
+  src:  url('./fonts/CooperHewitt-Thin.woff') format('woff');
+  font-weight: 200; /* Thin */
+  font-style: normal;
+}
 ::-webkit-scrollbar {
   width: 1.3rem;
 }
@@ -61,8 +74,8 @@ body {
 
 .container {
   max-width: 124rem;
-  padding: 4rem 1rem;
   margin: 0 auto;
+  padding-left: 15rem;
 }
 
 .heading {
@@ -71,33 +84,51 @@ body {
   font-weight: 400;
   text-align: center;
   font-family: 'Fjalla One';
-  color: #ffff;
+  color:#000;
   
 
   
 }
+
 .heading span {
-  background-color: #8e44ad;
-  border-radius: 30px;
+
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 5px;
+}
+.subheading{
+  color:#000;
+}
+.subheading span{
+  border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 5px;
 }
 
 .swiper_container {
-  height: 52rem;
+  height: 40rem;
   padding: 2rem 0;
   position: relative;
 }
+@media (max-width: 600px) {
+  .heading span {
+    font-size: 2rem; /* smaller font size */
+    /* adjust line height to prevent overlap */
+  }
+  .container {
+    padding: 0rem 1rem;
+  }
+}
 
 .swiper-slide {
-  width: 37rem !important;
-  height: 40rem !important;
+  width: 20rem !important;
+  height: 23rem !important;
   position: relative;
 }
 
 @media (max-width: 500px) {
   .swiper_container {
-    height: 47rem;
+    height: 46rem;
   }
   .swiper-slide {
     width: 28rem !important;
@@ -105,13 +136,13 @@ body {
   }
   .swiper-slide img {
     width: 28rem !important;
-    height: 36rem !important;
+    height: 35rem !important;
   }
 }
 
 .swiper-slide img {
-  width: 37rem;
-  height: 42rem;
+  width: 20rem;
+  height: 23rem;
   border-radius: 2rem;
   object-fit: cover;
   border: 2px solid black;
@@ -125,7 +156,7 @@ body {
 
 .slider-controler {
   position: relative;
-  bottom: 2rem;
+  bottom: 3rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -184,13 +215,15 @@ body {
 }
 
 .swiper-pagination {
-  position: relative;
+  position: relative; 
+  
   
   bottom: 1rem;
 }
 
 .swiper-pagination .swiper-pagination-bullet {
   filter: drop-shadow(0px 8px 24px rgba(18, 28, 53, 0.1));
+
 }
 
 .swiper-pagination .swiper-pagination-bullet-active {
@@ -212,12 +245,84 @@ body {
   margin-top: 2rem; 
 
 }
-.videoback{
-  width: 100%;
-  height: 100%;
+
+.gif-card {
+  cursor: pointer;
+  overflow: hidden;
 }
-video{
+
+.gif-image {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  max-width: 100%;
+  height: auto;
+  transition: filter 0.3s ease;
+}
+
+.gif-container {
+  width: /* Width of your image */ ;
+  height: /* Height of your image */ ;
+}
+
+.hidden-gif {
+  display: none;
+}
+
+.gif-card:hover .hidden-gif {
+  display: block;
+}
+.navbar {
+  background-color: #fff; /* Adjust the color to match your design */
+  height: 80px; /* Adjust the size as needed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Your font-family here', sans-serif; /* Replace with your font */
+  padding: 0 20px; /* Adjust the padding as needed */
+  color:#42a5f5;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #42a5f5; /* Adjust the color to match your design */
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-item {
+  margin: 0 15px; /* Adjust the margin as needed */
+  font-size: 1rem;
+  color: #42a5f5; /* Adjust the color to match your design */
+  cursor: pointer;
+}
+
+.login-button {
+  border: none;
+  background-color: #000; /* Adjust the color to match your design */
+  color: #fff; /* Adjust the color to match your design */
+  padding: 10px 20px; /* Adjust the padding as needed */
+  cursor: pointer;
+  border-radius: 5px; /* Adjust the border-radius as needed */
+}
+
+/* Add responsive design and other styles as needed */
+@keyframes moveRightToLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
 }

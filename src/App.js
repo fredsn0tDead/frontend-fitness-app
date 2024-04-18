@@ -14,7 +14,9 @@
   import { ResetPassword } from './Components/ResetPassword';
   import { Recommender } from './Components/Recommender';
   import { Excerise_store } from './Components/Excerise_store';
-
+  import { ExcersiseSearch } from './pages/ExcersiseSearch';
+  import { CreateWorkout } from './pages/CreateWorkout';
+  import { MeasurementsProvider } from './Components/MeasurementsContext';
   function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -44,8 +46,8 @@
     };
 
     return (
-      <div>
-      <Nav isLoggedIn={isLoggedIn} onSignOut={handleSignOut} toggleProfile={toggleProfile} showProfile={showProfile}/>{/* placed the nav bar at top to be outted on each page */}
+      <MeasurementsProvider >
+       <Nav isLoggedIn={isLoggedIn} onSignOut={handleSignOut} toggleProfile={toggleProfile} showProfile={showProfile}/> 
 
       <Routes>
       <Route  path="/" element={<Homepage/> }/>
@@ -58,11 +60,11 @@
         <Route exact path='/forgotpassword' element={<ForgotPassword/>}/>
         <Route exact path='/resetpassword' element={<ResetPassword/>}/>
         <Route exact path='/recommender' element={<Recommender/>}/>
-      
         <Route exact path="/ExcersiseStore" element={<Excerise_store/>} />
-        
+        <Route exact path="/ExcersiseSearch" element={<ExcersiseSearch/>} />
+        <Route exact path="/CreateWorkout" element={<CreateWorkout/>} />
         </Routes>
-      </div>
+      </MeasurementsProvider>
     );
   }
 

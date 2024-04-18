@@ -16,7 +16,14 @@ const StyledContainer = styled('div')`
   animation: slideInOut 0.5s ease-out;
   background: '#8e44ad'; // Add slide-in/out animation
 `;
-
+const colors = {
+  primary: '#1976D2', // For example, a nice blue
+  primaryLight: '#42a5f5',
+  secondary: '#F50057', // For accents
+  surface: '#ffffff', // For card-like surfaces
+  onSurface: '#333333', // Text on the surface
+  // ... include other colors as needed
+};
 
 const CalendarHeader = styled('h1')`
   background-color: ${calendarTheme.palette.primary.main};
@@ -43,64 +50,114 @@ const CalendarContainer = styled('div')`
   align-items: center;
   margin-top: 20px;
 `;
-
-// Custom styles for the react-calendar component
 const StyledCalendar = styled(Calendar)`
   && {
-    background-color: ${calendarTheme.palette.background.default};
-    color: ${calendarTheme.palette.text.primary};
-    border: 1px solid ${calendarTheme.palette.secondary.main}; /* Set border color */
-    border-radius: 30px; /* Add a 30px border radius */
-    opacity: 0;
-    animation: fadeIn 1s ease-out forwards;
-    font-family: 'Fjalla One';
-
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-      }
-      to {
-        opacity: 1;
-      }
+    font-family: 'Roboto', sans-serif;
+    background-color: ${colors.surface};
+    color: ${colors.onSurface};
+    box-shadow: 0px 4px 6px -1px rgba(0,0,0,0.1), 0px 2px 4px -1px rgba(0,0,0,0.06);
+    border-radius: 10px;
+    padding: 20px;
+    border: none;
+    width: 300px; // Set width to 300 pixels
+    height: 300px; // Set height to 300 pixels
+    /* Additional styling to ensure content fits well in the new size */
+    .react-calendar {
+      max-width: 100%;
+      height: 100%;
     }
-  
+
     .react-calendar__tile {
-      color: white; /* Set text color to white */
-      border-radius: 0; /* Remove default border radius */
-      border-radius: 30px;
-      font-family: 'Fjalla One';
+      border-radius: 10px;
+      font-family: 'Roboto', sans-serif;
+      &:hover {
+        background-color: ${colors.primaryLight};
+      }
     }
 
     .react-calendar__tile--active {
-      background-color: ${calendarTheme.palette.secondary.main};
-      color: white;
-      border-radius: 30px;
+      background-color: ${colors.primary};
+      color: ${colors.surface};
     }
 
     .react-calendar__tile--now {
-      color: #FFFF;
-      background-color: #666; /* Set very light blue background color */
-      border-radius: 30px; /* Adjust border radius for the current day */
+      background-color: ${colors.secondary};
+      color: ${colors.surface};
     }
-    .react-calendar__tile--hover {
-      background-color: ${calendarTheme.palette.secondary.light}; /* Set light blue background color for hover state */
-    }
+
     .react-calendar__navigation button {
-      background-color: ${calendarTheme.palette.secondary.main};
-      color: white;
+      background-color: transparent;
+      color: ${colors.onSurface};
       border: none;
-      padding: 5px 10px;
-      cursor: pointer;
-      border-radius: 30px;
+      font-family: 'Roboto', sans-serif;
+      &:hover {
+        background-color: ${colors.primaryLight};
+      }
     }
-    
+
     .react-calendar__navigation button:disabled {
-      background-color: #ddd;
-      color: #666;
-      cursor: not-allowed;
+      background-color: transparent;
+      color: ${colors.onSurface}66;
     }
   }
 `;
+// Custom styles for the react-calendar component
+// const StyledCalendar = styled(Calendar)`
+//   && {
+//     background-color: ${calendarTheme.palette.background.default};
+//     color: ${calendarTheme.palette.text.primary};
+//     border: 1px solid ${calendarTheme.palette.secondary.main}; /* Set border color */
+//     border-radius: 30px; /* Add a 30px border radius */
+//     opacity: 0;
+//     animation: fadeIn 1s ease-out forwards;
+//     font-family: 'Fjalla One';
+
+//     @keyframes fadeIn {
+//       from {
+//         opacity: 0;
+//       }
+//       to {
+//         opacity: 1;
+//       }
+//     }
+  
+//     .react-calendar__tile {
+//       color: white; /* Set text color to white */
+//       border-radius: 0; /* Remove default border radius */
+//       border-radius: 30px;
+//       font-family: 'Fjalla One';
+//     }
+
+//     .react-calendar__tile--active {
+//       background-color: ${calendarTheme.palette.secondary.main};
+//       color: white;
+//       border-radius: 30px;
+//     }
+
+//     .react-calendar__tile--now {
+//       color: #FFFF;
+//       background-color: #666; /* Set very light blue background color */
+//       border-radius: 30px; /* Adjust border radius for the current day */
+//     }
+//     .react-calendar__tile--hover {
+//       background-color: ${calendarTheme.palette.secondary.light}; /* Set light blue background color for hover state */
+//     }
+//     .react-calendar__navigation button {
+//       background-color: ${calendarTheme.palette.secondary.main};
+//       color: white;
+//       border: none;
+//       padding: 5px 10px;
+//       cursor: pointer;
+//       border-radius: 30px;
+//     }
+    
+//     .react-calendar__navigation button:disabled {
+//       background-color: #ddd;
+//       color: #666;
+//       cursor: not-allowed;
+//     }
+//   }
+// `;
 
 const WorkoutContainer = styled('div')`
   margin-top: 20px;
