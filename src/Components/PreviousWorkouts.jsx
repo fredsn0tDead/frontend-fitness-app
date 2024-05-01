@@ -10,6 +10,18 @@ import {styled} from '@mui/system';
 import  calendarTheme  from './CalendarTheme';  
 import { ThemeProvider } from '@mui/system';
 import axios from 'axios';
+import { Paper } from '@mui/material';
+import { WorkoutTable } from './WorkoutTable';
+const StyledPaper = styled(Paper)({
+    elevation: 3,
+    padding: '20px',
+    display: 'flex',
+   flexDirection: 'row',
+   alignItems: 'left',
+    marginTop:'20px',
+    marginLeft:'190px',
+});
+
 const StyledContainer = styled('div')`
   text-align: center;
   margin: 20px;
@@ -235,6 +247,7 @@ export const PreviousWorkouts = () => {
           const data = await response.json();
           setWorkoutData(data);
           console.log(data);
+          console.log('Workout data',workoutData)
           }
           else{
             console.log('Error fetching workout data:', response.status);
@@ -245,6 +258,9 @@ export const PreviousWorkouts = () => {
           console.error('Error fetching workout data:', error);
           setSelectedDate(null);
         }
+      }
+      else{
+        console.log('User not authenticated');
       }
     };
       
@@ -279,18 +295,23 @@ export const PreviousWorkouts = () => {
 
  
   return (
+    <StyledPaper>
     <StyledContainer onAnimationEnd={() => console.log('Animation ended')}>
+     
       
       <CalendarContainer>
         <StyledCalendar onChange={handleDateChange} value={selectedDate} />
         <WorkoutContainer>
-          {workoutData !== null ? (
-            <StyledWorkoutLog_Card workoutdata={workoutData} selecteddate={selectedDate} onDelete={handleDelete}/>
-          ) : (
-            <Styledheader>You have not entered any workouts on this day</Styledheader>
-          )}
+         
         </WorkoutContainer>
       </CalendarContainer>
+      
     </StyledContainer>
+    {selectedDate && (workoutData ? (
+        <WorkoutTable data={workoutData} />
+      ) : (
+        <p>No workout data available for the selected date.</p>
+      ))}
+    </StyledPaper>
   );
 };

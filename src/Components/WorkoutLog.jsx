@@ -79,8 +79,35 @@ export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete 
   const [isVisible, setIsVisible] = useState(true);
   const datestring = JSON.stringify(selecteddate);
   const formatedate = datestring.slice(1, 11);
+  const [name,setName] = useState([]);
+  const [weight,setWeight] = useState([]);
+  
+  
+  useEffect(() => {
+    // Initialize empty arrays for name and weight
+    const initialNames = [];
+    const initialWeights = [];
 
- 
+    if (Array.isArray(workoutdata)) {
+      workoutdata.forEach((item) => {
+        const exercises = JSON.parse(item.exercises);
+
+        exercises.forEach((exercise) => {
+          initialNames.push(exercise.exercise);
+          initialWeights.push(exercise.weight);
+        });
+      });
+    }
+
+    // Update the state
+    setName(initialNames);
+    setWeight(initialWeights);
+    console.log('name',name);
+    console.log('weight',weight);
+  }, [workoutdata]); // Run the effect when workoutdata changes
+
+  // ... (rest of your component code)
+
 
   
 
@@ -111,10 +138,12 @@ export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete 
                 return (
                   <React.Fragment key={index}>
                     {exercises.map((exercise, exerciseIndex) => (
+                      
+                      console.log('name',name),
                       <TableRow key={exerciseIndex}>
-                        <TableCell align="left">{exercise.exercise}</TableCell>
+                        <TableCell align="left">{exercise.exercise}</TableCell>{/*add a button */}
                         <TableCell align="left">{exercise.sets}</TableCell>
-                        <TableCell align="leftt">{exercise.reps}</TableCell>
+                        <TableCell align="leftt">{exercise.reps}</TableCell>{/*add a button get all the reps over time */}
                         <TableCell align="left">{exercise.weight}</TableCell>
                         <TableCell align="left">{exercise.rpe}</TableCell>
                         <Button className='delete-button' variant="contained"onClick={() => onDelete(item._id)}>Delete</Button>

@@ -36,45 +36,22 @@ import { GraphBox } from '../Components/GraphBox.jsx';
 import { SlideCarousel } from '../Carousel/SlideCarousel.jsx';
 import { Stack } from '@mui/material';
 import Color from "color";
-// const Tracker = styled(Paper)({
-//   display: 'flex',
-//   flexDirection: 'row',
-//   alignItems: 'center',
-//   justifyContent: 'center',
-//   minHeight: '10vh',
-//   padding: '8px', // Use the desired padding value
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { Datebar } from '../Components/Datebar.jsx';
+import {auth} from '../Components/firebase.js'
+import { getAuth, onAuthStateChanged,onIdTokenChanged  } from 'firebase/auth';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
-// });
-// const RootContainer = styled('div')({
-//     display: 'flex',
-//     flexDirection: 'column',
-//     alignItems: 'center',
-//     justifyContent: 'center',
-//     minHeight: '10vh',
-//     padding: '8px', // Use the desired padding value
-//     paddingTop: '20px',
-//   });
-  
+import axios from 'axios';
 
-//   const ActionButtonsContainer = styled('div')({
-//     display: 'table',
-//     justifyContent: 'space-between',
-//     marginTop: '16px', // Use the desired margin value
-//     '& > div': {
-//       marginRight: '16px', // Add space between the ER_Card components
-//       flex: '1', // Ensure each ER_Card takes equal space
-//     },
-//    paddingLeft: '240px',
-//   });
- 
-//   // used to search for older workouts create a new workout and view your progress
-//   //should be able to output a graph of your progress
 const StyledPaper = styled(Paper)({
   padding: '12px 24px',
-  display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
   marginLeft:'190px',
   marginTop:'20px',
+  
 });
 
 const ColumnPaper = styled(Paper)({
@@ -109,6 +86,12 @@ const StyledBox3 = styled(Paper)({
 
   display: 'flex',
 });
+const StyledBox4 = styled(Paper)({
+  
+  width: 'auto',
+  
+  display: 'flex',
+});
 const TextContainer = styled(Box)({
   marginRight: '20px',
 });
@@ -117,18 +100,23 @@ const TextContainer = styled(Box)({
 export const Dashboard = ({ showProfile,toggleProfile }) => {
     // const location = useLocation();
   // const { displayName, email, uid } = location.state || {};
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [exerciseNames, setExerciseNames] = useState('');
+  const [user, setUser] = useState(null);
+  const[workoutData, setWorkoutData] = useState(null);
+  const [weightData, setWeightData] = useState(null);
   
   const location = useLocation();
   const navigate = useNavigate();
   const  {displayName, email, uid} =  location.state || {};
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+
   const [userDisplayName, setUserDisplayName] = useState(
     localStorage.getItem('userDisplayName') || displayName || ''
   );
-  
  
-
- 
-
   useEffect(() => {
     localStorage.setItem('userDisplayName', userDisplayName);
   }, [userDisplayName]);
@@ -137,19 +125,200 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
     setUserDisplayName(newDisplayName);
     console.log('New display name:', newDisplayName);
   };
+  
+  const handleDateChange = (date, label) => {
+    if (label === 'Start Date') {
+      setStartDate(date);
+    } else if (label === 'End Date') {
+      setEndDate(date);
+    }
+    console.log('Date:', startDate, endDate);
+  };
+  const handleSearch = (newValue) => {
+    setExerciseNames(newValue);
+    console.log('Search:', newValue);
+  };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+  
+  const fetchdata = async (e) => {
+    
+    //need to send the startdate, enddate, and exerciseNames to the backend
+    // Need to format the dates first
+    const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : null;
+    const formattedEndDate = endDate ? endDate.format('YYYY-MM-DD') : null;
+    
+    const excersiseName =  exerciseNames;
+    if (user && uid) {
+      try {
+        
+        const idToken = await user.getIdToken(false);
+        console.log(idToken);
+        const response = await fetch(`http://127.0.0.1:5000/get-workout-new?start_date=${formattedStartDate}&end_date=${formattedEndDate}&excersiseName=${excersiseName}`, {
+      method: "GET",
+      headers: {
+        Authorization: `${idToken}`,
+        "Content-Type": "application/json",
+        // Add any additional headers such as authorization token if required
+      },
+
+    });
+
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch workout data");
+    }
+
+    const data = await response.json();
+    setWorkoutData(data);
+    console.log('workout deez',workoutData)
+    console.log("Workout data:", data);
+    if (!data || (Array.isArray(data) && data.length === 0) || (typeof data === 'object' && data.message === 'No workouts found for the selected date range')) {
+      setOpenSnackbar(true);
+      setSnackbarMessage('No workouts found for the selected date range');
+      
+    } else {
+      setOpenSnackbar(false);
+    }
+    
+    // Process the retrieved workout data here
+  } catch (error) {
+    console.error("Error fetching workout data:", error.message);
+  }
+  }
+};
+  const formatDate = date => {
+    // Implement your date formatting logic to match MongoDB custom_id
+    // For example: YYYY-MM-DD
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    
+    const id = `${year}${month}${day}`;
+    console.log(id);
+    return `${year}${month}${day}`;
+    
+  };
+  
+  useEffect(() => {
+    const auth = getAuth();
+
+    // Use onAuthStateChanged to listen for changes in authentication state
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user); // Update the user state when authentication state changes
+    });
+    const unsubscribeIdToken = onIdTokenChanged(auth, async (user) => {
+      if (user) {
+        const idToken = await user.getIdToken();
+        console.log('Refreshed ID token:', idToken);
+        // You can use the refreshed token in your requests
+      }
+    });
+
+
+    return () => {
+      unsubscribe(); // Clean up the listener when the component unmounts
+      unsubscribeIdToken();
+    };
+  }, []);
  
+  const idArray = [];
+  const weightArray = [];
+  const repsArray = [];
+
+  if (Array.isArray(workoutData) && workoutData.length <= 2) {
+    workoutData.forEach((data) => {
+      // Assuming data.Workoutdata is also an array
+      data.Workoutdata.forEach((exercise) => {
+        weightArray.push(exercise.weight);
+        repsArray.push(exercise.reps);
+      });
+      idArray.push(data.id);
+    });
+  
+    // Continue processing or rendering based on the populated arrays
+  } else {
+    // Handle the case when workoutData is not an array or is empty
+    // For example, you can log a message or set default values
+    console.log('workoutData is not an array or is empty. Component will continue rendering.');
+  }
+  
+  
+const weightDatapoints = weightArray.map(num => parseInt(num));
+console.log(idArray);
+console.log(weightDatapoints);
   return (
     <>
-    <StyledPaper>
-      <Typography variant="h5" component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'left' }}>
-        Good Mourning {userDisplayName}!
+    <StyledPaper sx={{ justifyContent: 'center' }}>
+      
+      <Typography variant="h5" component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",paddingBottom:'4px',marginBottom:'8px' }}>
+        Welcome Back {userDisplayName}! 
+        {/* <Typography>Check Your Progress on a  <br/> Specific  Excerise! </Typography> */}
       </Typography>
-      <Searchbar/>
+    
+      <Stack flexDirection='column' >
+         
+      <Searchbar handleSearch={handleSearch}/>
+       
+    
+     
+      <Box  gap={2} sx={{
+        
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        paddingTop:'4px'
+       
+      }} >
+       <Datebar label="Start Date" onDateChange={(date) => handleDateChange(date, 'Start Date')} />
+      <Datebar label="End Date" onDateChange={(date) => handleDateChange(date, 'End Date')} />
+      <Button 
+      sx={{
+        padding:'9px 6.2px',
+        marginTop:'6px',
+      }}
+      onClick={fetchdata}
+      size="small"
+      color="primary"
+      variant="outlined"
+      >
+        Search Data
+      </Button>
+      <StyledBox4>
+      <Typography variant="h5" component="div" 
+      sx={{ 
+        fontFamily: "Fjalla One", 
+        textAlign:'center',
+        padding:'1.5px 2px',
+        marginTop:'2px',}} 
+      >
+          Look Back and see how far you've come!
+        </Typography>
+      </StyledBox4>
+      <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+    <MuiAlert onClose={handleSnackbarClose} severity="info" sx={{ width: '100%' }}>
+    {snackbarMessage}
+     </MuiAlert>
+      </Snackbar>
+
+      </Box>
+      </Stack>
+      {/* <StyledBox3>
+        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}} >
+          Your Workout Progression
+        </Typography>
+      </StyledBox3> */}
+    
     </StyledPaper>
     <ColumnPaper>
 
     
-    <Grid  direction='row' container spacing={1} wrap='false' alignItems='stretch'   >
+    {/* <Grid  direction='row' container spacing={1} wrap='false' alignItems='stretch'   >
     <List item>
     <StyledBox > 
       <TextContainer>
@@ -193,10 +362,11 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
    
     </StyledBox2>
     </List> 
-      </Grid>
+      </Grid> */}
       <StyledBox3>
+        
         <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-          Goal Progression
+          Goal Progression: <Typography sx={{fontSize:'8px'}}> {exerciseNames} </Typography> 
         </Typography>
         <Box sx={{
           display: 'flex',
@@ -207,140 +377,19 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
           paddingTop: '20px',
         }} >
            <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-            Max Weight
+            Max Weight (Ibs)
         </Typography>
-          <GraphBox/>
+          <GraphBox Datapoints={weightDatapoints} xAxialabel={'Weeks'} yAxislabel={'Weight (Ibs)'}/>
+          
           <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
             Max Reps
         </Typography>
-          <GraphBox/>
-
-          
-
+          <GraphBox xAxialabel={'Weight'} yAxislabel={'Reps'} Datapoints={weightDatapoints}/>
 
         </Box>
-
+            
       </StyledBox3>
     </ColumnPaper>1
-    
-       
-    {/* <RootContainer>
-    
-      <ActionButtonsContainer>
-      
-      <Typography variant="h5" component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }}>
-        Track Your Progress Over Time
-      </Typography>
-      <Grid wrap={"nowrap"} container spacing={4}  
-       sx={{
-      '@media (max-width: 960px)': {
-       flexDirection: 'column',
-       alignItems: 'center', // Change direction to column on medium screens
-       paddingTop: '10px', // Use the desired padding value
-      
-    },
-  }} > */}
-    
-    {/* <Grid item>
-        <Typography variant='5' component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }}>
-          View Your Previous Workouts
-        </Typography>
-          <PreviousWorkouts />
-        </Grid>
-        <Grid item>
-          <Typography variant='h5'component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }} > Statistics </Typography>
-          <GraphBox/>
-          
-      </Grid> */}
-      {/* <Grid item>
-          <CardHighlight 
-          color1 = "#5357ce"
-          brand1={'Excerise Workout Log'} 
-          backgorundImage1={image2} 
-          cover1 ={image1} 
-          description={ <>
-                    Track your fitness
-                    <br />Workout Plan
-                  </>
-                  }
-          onClick={() => {
-            navigate('/exercise-log', { state: { displayName, email, uid } });
-          }}
-                  />
-          
-        </Grid>
-
-        <Grid item>
-            <CardHighlight 
-          color1="#fc7944"
-          brand1={'Excerise Recommendations'} 
-          backgorundImage1={image3} 
-          cover1 ={image4} 
-          description={<>
-            Need Help 
-            <br /> Your Perfect Workout Plan 
-            <br/>is one click away
-          </>}
-          onClick={() => {
-            navigate('/recommender', { state: { displayName, email, uid } });
-          }}
-          />
-        </Grid> */}
-       
-        
-    
-    {/* </Grid>
-    <Grid wrap={"nowrap"} container spacing={4}  
-       sx={{
-      '@media (max-width: 960px)': {
-       flexDirection: 'column',
-       alignItems: 'center', // Change direction to column on medium screens
-       paddingTop: '10px', // Use the desired padding value
-      
-    },
-  }} >
-    
-    <Grid item>
-        <Typography variant='5' component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }}>
-          View Your Previous Workouts
-        </Typography>
-          <PreviousWorkouts />
-        </Grid>
-        <Grid item>
-          <Typography variant='h5'component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }} > Statistics </Typography>
-          <GraphBox/>
-          
-      </Grid>
-      </Grid> */}
-    {/* <Box sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      padding: '8px', // Use the desired padding value
-      paffingTop: '20px',
-   }} > */}
-      
-      {/* <Grid container spacing={4} flexDirection='row' >
-        
-        <Grid item>
-        <Typography variant='5' component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }}>
-          View Your Previous Workouts
-        </Typography>
-          <PreviousWorkouts />
-        </Grid>
-        <Grid item>
-          <Typography variant='h5'component="div" sx={{ flexGrow: 1, fontFamily: "Fjalla One",textAlign:'center' }} > Statistics </Typography>
-          <GraphBox/>
-          
-      </Grid>
-        </Grid> */}
- 
-    
-
-      {/* </ActionButtonsContainer>
-   
-  </RootContainer> */}
 
   {showProfile && <Profile showProfile={showProfile} toggleProfile={toggleProfile} onDisplayNameUpdate={handleDisplayNameUpdate} />}
 

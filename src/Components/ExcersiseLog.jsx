@@ -123,12 +123,16 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+    console.log('Submitting form data:', tableData.map((row) => row.exercise));//we want to store the weights and reps in the database
+    const execersiseNameData = (tableData.map((row) => row.exercise));
     const jsonData = JSON.stringify(tableData);
-
+    console.log(execersiseNameData)
     if (user && uid) {
       try {
-        await axios.post('http://127.0.0.1:5000/submit-form', jsonData, {
+        await axios.post('http://127.0.0.1:5000/submit-form',{
+          data: tableData,  // The original table data
+          exerciseNames: execersiseNameData  // The exercise names
+        }, {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `${await user.getIdToken()}`,
@@ -249,6 +253,7 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
                       ))}
                     </Stack>
                   </StyledTableCell>
+                 
                   <StyledTableCell>
                     <Stack direction="column" alignItems="flex-start">
                       <Button variant="outlined" onClick={addRow} style={{marginTop:10}}>
@@ -268,7 +273,7 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
               <TableBody>
                 <TableRow>
                   <StyledTableCell>
-                    <Button variant="contained" type="submit" style={{ marginLeft: '0px',marginLeft:'240px' }}>
+                    <Button variant="contained" type="submit" style={{marginLeft:'240px' }}>
                       Record
                     </Button>
                   </StyledTableCell>
