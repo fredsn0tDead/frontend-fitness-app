@@ -3,15 +3,15 @@ import { useState,useEffect } from 'react'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css';
 import { useLocation } from 'react-router-dom';
-import { auth } from './firebase';
 import { getAuth, onAuthStateChanged,onIdTokenChanged  } from 'firebase/auth'; 
 import { WorkoutLog_Card } from './WorkoutLog';
 import {styled} from '@mui/system';
 import  calendarTheme  from './CalendarTheme';  
 import { ThemeProvider } from '@mui/system';
 import axios from 'axios';
-import { Paper } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { WorkoutTable } from './WorkoutTable';
+import Image1 from '../Assets/HAPPYw.png'
 const StyledPaper = styled(Paper)({
     elevation: 3,
     padding: '20px',
@@ -20,8 +20,20 @@ const StyledPaper = styled(Paper)({
    alignItems: 'left',
     marginTop:'20px',
     marginLeft:'190px',
+    marginRight:'40px',
 });
+const StyledPaper1 = styled(Paper)({
+  elevation: 3,
+  padding: '20px',
+  display: 'flex',
+ flexDirection: 'column',
+ alignItems: 'center',
+  marginTop:'40px',
+  marginBottom:'40px',
+  marginLeft:'110px',
 
+  
+});
 const StyledContainer = styled('div')`
   text-align: center;
   margin: 20px;
@@ -113,63 +125,6 @@ const StyledCalendar = styled(Calendar)`
     }
   }
 `;
-// Custom styles for the react-calendar component
-// const StyledCalendar = styled(Calendar)`
-//   && {
-//     background-color: ${calendarTheme.palette.background.default};
-//     color: ${calendarTheme.palette.text.primary};
-//     border: 1px solid ${calendarTheme.palette.secondary.main}; /* Set border color */
-//     border-radius: 30px; /* Add a 30px border radius */
-//     opacity: 0;
-//     animation: fadeIn 1s ease-out forwards;
-//     font-family: 'Fjalla One';
-
-//     @keyframes fadeIn {
-//       from {
-//         opacity: 0;
-//       }
-//       to {
-//         opacity: 1;
-//       }
-//     }
-  
-//     .react-calendar__tile {
-//       color: white; /* Set text color to white */
-//       border-radius: 0; /* Remove default border radius */
-//       border-radius: 30px;
-//       font-family: 'Fjalla One';
-//     }
-
-//     .react-calendar__tile--active {
-//       background-color: ${calendarTheme.palette.secondary.main};
-//       color: white;
-//       border-radius: 30px;
-//     }
-
-//     .react-calendar__tile--now {
-//       color: #FFFF;
-//       background-color: #666; /* Set very light blue background color */
-//       border-radius: 30px; /* Adjust border radius for the current day */
-//     }
-//     .react-calendar__tile--hover {
-//       background-color: ${calendarTheme.palette.secondary.light}; /* Set light blue background color for hover state */
-//     }
-//     .react-calendar__navigation button {
-//       background-color: ${calendarTheme.palette.secondary.main};
-//       color: white;
-//       border: none;
-//       padding: 5px 10px;
-//       cursor: pointer;
-//       border-radius: 30px;
-//     }
-    
-//     .react-calendar__navigation button:disabled {
-//       background-color: #ddd;
-//       color: #666;
-//       cursor: not-allowed;
-//     }
-//   }
-// `;
 
 const WorkoutContainer = styled('div')`
   margin-top: 20px;
@@ -197,6 +152,10 @@ export const PreviousWorkouts = () => {
     const location = useLocation();
     const {displayName, email, uid} =  location.state || {};
     const [user, setUser] = useState(null);
+    const [shouldRefreshTable, setShouldRefreshTable] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
+
+
     console.log('Exercise Log component rendering...');
      console.log('User info:', displayName, email, uid);
      
@@ -228,11 +187,15 @@ export const PreviousWorkouts = () => {
     const handleDateChange = async (newDate) => {
          formatDate(newDate);
         setSelectedDate(newDate);
+        setWorkoutData(null);
       await fetchWorkoutData(newDate);
+      
       };
+      
       const fetchWorkoutData = async (date) => {
         const formattedDate = formatDate(date);
         console.log('Fetching workout data for', formattedDate);
+        setIsLoading(true);
         if (user && uid) {
         try {
           
@@ -246,6 +209,8 @@ export const PreviousWorkouts = () => {
           if (response.ok) {
           const data = await response.json();
           setWorkoutData(data);
+          setShouldRefreshTable(true); // Trigger re-render
+          setTimeout(() => setShouldRefreshTable(false), 0);
           console.log(data);
           console.log('Workout data',workoutData)
           }
@@ -254,9 +219,14 @@ export const PreviousWorkouts = () => {
             setWorkoutData(null);
           }
           
+
+          
         } catch (error) {
           console.error('Error fetching workout data:', error);
           setSelectedDate(null);
+        }
+        finally{
+          setIsLoading(false);
         }
       }
       else{
@@ -307,11 +277,19 @@ export const PreviousWorkouts = () => {
       </CalendarContainer>
       
     </StyledContainer>
-    {selectedDate && (workoutData ? (
-        <WorkoutTable data={workoutData} />
+    {selectedDate && (
+    isLoading ? (
+        null
+     ) : workoutData && Array.isArray(workoutData) ? (
+          <WorkoutTable data={workoutData} shouldRefresh={shouldRefreshTable} handleDateChange={handleDateChange} />
       ) : (
-        <p>No workout data available for the selected date.</p>
-      ))}
+          <StyledPaper1>
+              <Typography variant='h5' sx={{textAlign:'left',justifyContent:'center',fontWeight:'bold',fontFamily: "Fjalla One"}}>Don't forget to save your workouts.</Typography>
+              <img src={Image1} style={{ width: '65%', marginLeft:'30px' }} alt='No workout data available' />
+              <Typography variant='h5' sx={{textAlign:'left',justifyContent:'center',fontWeight:'bold',fontFamily: "Fjalla One"}}>So you can show off your amazing progress!!</Typography>
+          </StyledPaper1>
+      )
+)}
     </StyledPaper>
   );
 };

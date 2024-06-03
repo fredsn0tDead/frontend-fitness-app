@@ -1,22 +1,21 @@
-  import logo from './logo.svg';
-
-  import { Route, Routes ,BrowserRouter, useLocation} from 'react-router-dom';
+  import { Route, Routes } from 'react-router-dom';
   import { useState,useEffect } from 'react';
-  import { ExcersiseLog } from './Components/ExcersiseLog';
-  import { Homepage } from './pages/Homepage';
-  import { Nav } from './Components/Nav';
-  import { Login } from './Components/Login';
-  import { Signup } from './Components/Signup';
-  import { SignOut } from './Components/SignOut';
-  import { PreviousWorkouts } from './Components/PreviousWorkouts';
-  import { Dashboard } from './pages/Dashboard';
-  import { ForgotPassword } from './Components/ForgotPassword';
-  import { ResetPassword } from './Components/ResetPassword';
-  import { Recommender } from './Components/Recommender';
-  import { Excerise_store } from './Components/Excerise_store';
-  import { ExcersiseSearch } from './pages/ExcersiseSearch';
-  import { CreateWorkout } from './pages/CreateWorkout';
-  import { MeasurementsProvider } from './Components/MeasurementsContext';
+  import { ExcersiseLog } from './Components/ExcersiseLog.jsx';
+  import React from 'react';
+  import { ProgramPlan } from './Components/ProgramPlan.jsx';
+  import { Homepage } from './pages/Homepage.jsx';
+  import { Nav } from './Components/Nav.jsx';
+  import { Login } from './Components/Login.jsx';
+  import { Signup } from './Components/Signup.jsx';
+  import { SignOut } from './Components/SignOut.jsx';
+  import { PreviousWorkouts } from './Components/PreviousWorkouts.jsx';
+  import { Dashboard } from './pages/Dashboard.jsx';
+  import { ForgotPassword } from './Components/ForgotPassword.jsx';
+  import { ResetPassword } from './Components/ResetPassword.jsx';
+  import { Recommender } from './Components/Recommender.jsx';
+  import { ExcersiseSearch } from './pages/ExcersiseSearch.jsx';
+  import { CreateWorkout } from './pages/CreateWorkout.jsx';
+  import { MeasurementsProvider } from './Components/MeasurementsContext.jsx';
   function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -51,6 +50,7 @@
 
       <Routes>
       <Route  path="/" element={<Homepage/> }/>
+      <Route  path="/ProgramPlan" element={<ProgramPlan/> }/>
       <Route exact path="/exercise-log" element= {<ExcersiseLog/>}/>
       <Route exact path="/login" element= {<Login onLogin={handleLogin}/>}/> 
         <Route exact path="/signup" element= {<Signup/>}/>
@@ -60,7 +60,6 @@
         <Route exact path='/forgotpassword' element={<ForgotPassword/>}/>
         <Route exact path='/resetpassword' element={<ResetPassword/>}/>
         <Route exact path='/recommender' element={<Recommender/>}/>
-        <Route exact path="/ExcersiseStore" element={<Excerise_store/>} />
         <Route exact path="/ExcersiseSearch" element={<ExcersiseSearch/>} />
         <Route exact path="/CreateWorkout" element={<CreateWorkout/>} />
         </Routes>

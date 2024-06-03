@@ -6,13 +6,16 @@ export const fetchData = async (excersise) => {
     method: 'GET',
     url: apiurl,
     headers: {
-      'X-RapidAPI-Key': '617226819dmshf904d7cf29b8ce4p1cd154jsn2ff03aff3d6f',
+      'X-RapidAPI-Key': 'f71c4a2b08msh0e59d9c5580e53bp1f471fjsne30292c31930',
       'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
     }
   };
   try {
     const response = await axios.request(options);
     console.log(response.data);
+    if (response.status === 429) { // Check for rate limit (Too Many Requests)
+      throw new Error('API Rate Limit Reached');
+    }
     return response.data;
   } catch (error) {
     console.error(error);

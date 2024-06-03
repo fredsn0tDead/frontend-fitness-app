@@ -2,48 +2,43 @@ import React from 'react'
 import{styled} from '@mui/material/styles'
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import {Link,useNavigate} from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
-import { ExcersiseLog } from '../Components/ExcersiseLog';
-import { Box,List,createTheme } from '@mui/material';
-import { ThemeProvider } from '@mui/material';
-import IMG1 from '../Assets/pexels-zakaria-boumliha-2827392.jpg'
-import IMG2 from '../Assets/pexels-leon-ardho-1552249.jpg'
-import IMG3 from '../Assets/pexels-koolshooters-7346634.jpg'
-import { ER_Card } from '../Components/ER_Card';
-import { VideoBackground } from '../Components/VideoBackground';
-import videoSource from '../Assets/VideoBackground.mp4'
-import { PreviousWorkouts } from '../Components/PreviousWorkouts';
-// import  {CardGalaxy}  from '../mui-treasury/card-galaxy/CardGalaxy.tsx';//when importing 
-import {CardHighlight} from '../mui-treasury/card-highlight/CardHighlight.tsx'
-import {test} from '../mui-treasury/card-highlight/test.jsx'
-import image1 from '../Assets/Fitness_logo.png'
-import image2 from "../Assets/workout_log.jpg";
-import image3 from "../Assets/recommendations.jpg";
-import image4 from "../Assets/fitness_logo2.png";
-import image5 from "../Assets/images.jpeg";
+import { Box } from '@mui/material';
+
+import image6 from "../Assets/beforew.png";
+import image7 from "../Assets/afterw.png";
+import image8 from "../Assets/Before.jpg";
+import image9 from "../Assets/After.jpg";
 import { Profile } from '../Components/Profile.jsx';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import { SideBar } from '../Components/SideBar.jsx';
-import {Avatar} from '@mui/material'
 // Profile I want a side bar that comes down when the page is loaded with edit display name
 import { Searchbar } from '../Components/Searchbar.jsx';
 import { GraphBox } from '../Components/GraphBox.jsx';
-import { SlideCarousel } from '../Carousel/SlideCarousel.jsx';
 import { Stack } from '@mui/material';
-import Color from "color";
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { Datebar } from '../Components/Datebar.jsx';
-import {auth} from '../Components/firebase.js'
 import { getAuth, onAuthStateChanged,onIdTokenChanged  } from 'firebase/auth';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
-import axios from 'axios';
+function convertMonthToNumber(month) {
+  return monthNames[month];
+}
+const monthNames = {
+  January: 1,
+  February: 2,
+  March: 3,
+  April: 4,
+  May: 5,
+  June: 6,
+  July: 7,
+  August: 8,
+  September: 9,
+  October: 10,
+  November: 11,
+  December: 12,
+};
 
 const StyledPaper = styled(Paper)({
   padding: '12px 24px',
@@ -51,6 +46,7 @@ const StyledPaper = styled(Paper)({
   justifyContent: 'center',
   marginLeft:'190px',
   marginTop:'20px',
+  backgroundColor: '',
   
 });
 
@@ -63,21 +59,23 @@ const ColumnPaper = styled(Paper)({
   marginLeft:'190px',
   
 });
-const StyledBox = styled(Paper)({
+
+const StyledBox1 = styled('div')({
   padding: '20px',
   alignItems: 'center',
   width: 'auto',
 
-  display: 'flex',
+  display: 'inline-flex',
 });
-const StyledBox2 = styled(Paper)({
-  padding: '20px',
-  alignItems: 'center',
-  marginBottom: '20px',
-  width: 'auto',
 
-  display: 'flex',
+const FlippingImage = styled('img')({
+  width: '150px',
+  height: 'auto',
+  transition: 'transform 0.5s',
+  cursor: 'pointer',
+  backfaceVisibility: 'hidden',
 });
+
 const StyledBox3 = styled(Paper)({
   padding: '20px',
   
@@ -92,9 +90,7 @@ const StyledBox4 = styled(Paper)({
   
   display: 'flex',
 });
-const TextContainer = styled(Box)({
-  marginRight: '20px',
-});
+
 
 
 export const Dashboard = ({ showProfile,toggleProfile }) => {
@@ -105,17 +101,18 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
   const [exerciseNames, setExerciseNames] = useState('');
   const [user, setUser] = useState(null);
   const[workoutData, setWorkoutData] = useState(null);
-  const [weightData, setWeightData] = useState(null);
   
   const location = useLocation();
-  const navigate = useNavigate();
-  const  {displayName, email, uid} =  location.state || {};
+  const  {displayName, uid} =  location.state || {};
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const [userDisplayName, setUserDisplayName] = useState(
     localStorage.getItem('userDisplayName') || displayName || ''
   );
+  const [isFlipped, setIsFlipped] = useState(false);
+
+  const handleHover = () => setIsFlipped(!isFlipped); 
  
   useEffect(() => {
     localStorage.setItem('userDisplayName', userDisplayName);
@@ -147,6 +144,24 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
   
   const fetchdata = async (e) => {
     
+    if (!exerciseNames.trim()) {
+      setOpenSnackbar(true);
+      setSnackbarMessage("Look for an exercise in your program");
+      return;
+    }
+    // Check if either start or end date is empty
+  if (!startDate || !endDate) {
+    setOpenSnackbar(true);
+    setSnackbarMessage("Enter both start and end dates");
+    return;
+  }
+  
+    // Check if start date is before end date
+    if (startDate && endDate && startDate >= endDate) {
+      setOpenSnackbar(true);
+      setSnackbarMessage("Enter an appropriate date. Start date must be before end date");
+      return;
+    }
     //need to send the startdate, enddate, and exerciseNames to the backend
     // Need to format the dates first
     const formattedStartDate = startDate ? startDate.format('YYYY-MM-DD') : null;
@@ -191,18 +206,7 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
   }
   }
 };
-  const formatDate = date => {
-    // Implement your date formatting logic to match MongoDB custom_id
-    // For example: YYYY-MM-DD
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    
-    const id = `${year}${month}${day}`;
-    console.log(id);
-    return `${year}${month}${day}`;
-    
-  };
+  
   
   useEffect(() => {
     const auth = getAuth();
@@ -229,28 +233,70 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
   const idArray = [];
   const weightArray = [];
   const repsArray = [];
-
+  console.log('workoutData:', workoutData);
   if (Array.isArray(workoutData) && workoutData.length <= 2) {
     workoutData.forEach((data) => {
       // Assuming data.Workoutdata is also an array
+      const id = data._id;
+      console.log('id:', id);
       data.Workoutdata.forEach((exercise) => {
         weightArray.push(exercise.weight);
         repsArray.push(exercise.reps);
       });
-      idArray.push(data.id);
+      idArray.push(data._id);
     });
-  
+    console.log('repsArray:', repsArray);
+    console.log('idArray:', idArray);
     // Continue processing or rendering based on the populated arrays
   } else {
     // Handle the case when workoutData is not an array or is empty
     // For example, you can log a message or set default values
     console.log('workoutData is not an array or is empty. Component will continue rendering.');
   }
-  
-  
+
+const repsdatapoints = repsArray.map(num => parseInt(num));
 const weightDatapoints = weightArray.map(num => parseInt(num));
-console.log(idArray);
-console.log(weightDatapoints);
+const formattedData = idArray.map((id) => {
+  // Extract the day part (YYYYMMDD) from the id
+  const dayPart = id.substring(0, 8);
+  // Convert the day part to a format suitable for the chart, for example, MM/DD/YYYY
+  const formattedDate = `${dayPart.substring(4, 6)}/${dayPart.substring(6, 8)}/${dayPart.substring(0, 4)}`;
+  return formattedDate;
+});
+const formattedData1 = formattedData.map((dateString) => new Date(dateString));
+const xAxisLabelsDate = formattedData1.map((dateObject) => {
+  // Use dateObject to format the label (e.g., dateObject.getDate())
+  return `May ${dateObject.getDate()}`;
+  
+});
+const xdatapointsToUse = xAxisLabelsDate?.map((dateString) => {
+  if (!dateString) {
+    // Handle missing date string (optional)
+    console.warn('Encountered a missing date string in xdatapoints.');
+    return null; // Or return a default value if desired
+  }
+  const dateParts = dateString.split(' '); // Assuming format is "Month Day"
+  const month = dateParts[0]; // Extract month
+  const day = parseInt(dateParts[1], 10); // Extract and parse day
+
+  // Assuming you have a function to convert month names to numerical values (replace with your actual logic)
+  const monthNumber = convertMonthToNumber(month);
+
+  if (!monthNumber) {
+    // Handle invalid month name (optional)
+    console.warn(`Invalid month name: ${month}`);
+    return null; // Or return a default value if desired
+  }
+
+  return new Date(2024, monthNumber - 1, day).getTime(); // Convert to milliseconds since epoch (assuming year 2024)
+});
+
+
+const dateformat = (value) => {
+  const date = new Date(value);
+  return date.toLocaleDateString();
+}
+
   return (
     <>
     <StyledPaper sx={{ justifyContent: 'center' }}>
@@ -259,11 +305,12 @@ console.log(weightDatapoints);
         Welcome Back {userDisplayName}! 
         {/* <Typography>Check Your Progress on a  <br/> Specific  Excerise! </Typography> */}
       </Typography>
-    
+      <Stack direction="row" spacing={4}>
       <Stack flexDirection='column' >
-         
+     
       <Searchbar handleSearch={handleSearch}/>
-       
+      
+      
     
      
       <Box  gap={2} sx={{
@@ -307,91 +354,57 @@ console.log(weightDatapoints);
       </Snackbar>
 
       </Box>
+
       </Stack>
-      {/* <StyledBox3>
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}} >
-          Your Workout Progression
-        </Typography>
-      </StyledBox3> */}
+      <StyledBox1 onMouseEnter={handleHover}>
+      
+      <FlippingImage src={image6} alt="Fitness Image" style={{ transform: `rotateY(${isFlipped ? 180 : 0}deg)` }} />
+      
+      <FlippingImage src={image7} alt="Fitness Image" style={{ transform: `rotateY(${isFlipped ? 0 : 180}deg)` }} />
+ 
+      </StyledBox1>
+      </Stack>
     
     </StyledPaper>
     <ColumnPaper>
 
-    
-    {/* <Grid  direction='row' container spacing={1} wrap='false' alignItems='stretch'   >
-    <List item>
-    <StyledBox > 
-      <TextContainer>
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One"}}>
-          Your Fitness Journey Starts Here.
-        </Typography>
-        <Typography variant="h6" component="div" sx={{ fontFamily: "Fjalla One" }}>
-          We offer a variety of tools to help you reach your fitness goals. Whether its an improved workout system or a personalized workout plan, we have you covered.
-        </Typography>
-        
-        
-      </TextContainer>
-    
-
-    </StyledBox>
-    </List>
-     <List item>
-    <StyledBox2 >
-
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-          Proven Workout Plans
-        </Typography>
-     
-    </StyledBox2>
-    </List>
-    <List item>
-    <StyledBox2 >
-
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One"}}>
-          Effortless Workout Tracking
-        </Typography>
-
-    </StyledBox2>
-    </List>
-    <List item>
-    <StyledBox2 >
-     
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One"}}>
-          Create your own
-        </Typography>
-   
-    </StyledBox2>
-    </List> 
-      </Grid> */}
+  
       <StyledBox3>
-        
-        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-          Goal Progression: <Typography sx={{fontSize:'8px'}}> {exerciseNames} </Typography> 
-        </Typography>
         <Box sx={{
+          alignItems: 'center',
           display: 'flex',
+          justifyContent: 'center',
+        }}>
+        <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
+          Excersise Progression: <Typography sx={{fontSize:'10px',fontFamily: "Fjalla One"}}> {exerciseNames} </Typography> 
+        </Typography>
+        </Box>
+        <Box  sx={{
+          display: 'flex',
+          
           flexDirection: 'row',
           alignItems: 'center',
-          justifyContent: 'center',
+       
           padding: '8px', // Use the desired padding value
           paddingTop: '20px',
         }} >
-           <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-            Max Weight (Ibs)
-        </Typography>
-          <GraphBox Datapoints={weightDatapoints} xAxialabel={'Weeks'} yAxislabel={'Weight (Ibs)'}/>
+           
+          <GraphBox  ydatapoints={weightDatapoints} xdatapoints={xdatapointsToUse}  valueformat={dateformat}  xAxialabel={'Date'} yAxislabel={'Weight (Ibs)'}/>
           
-          <Typography variant="h5" component="div" sx={{ fontFamily: "Fjalla One", textAlign:'center'}}>
-            Max Reps
-        </Typography>
-          <GraphBox xAxialabel={'Weight'} yAxislabel={'Reps'} Datapoints={weightDatapoints}/>
-
+         
+        <GraphBox ydatapoints={repsdatapoints}  xdatapoints={weightDatapoints}  xAxialabel={'Weight'} yAxislabel={'Reps'}/>
+        <Stack direction="row" spacing={4}>
+        <StyledBox1 onMouseEnter={handleHover}>
+        <FlippingImage src={image8} alt="Fitness Image" style={{ transform: `rotateY(${isFlipped ? 180 : 0}deg)` }} />
+        <FlippingImage src={image9} alt="Fitness Image" style={{ transform: `rotateY(${isFlipped ? 0 : 180}deg)` }} />
+    
+        </StyledBox1>
+        </Stack>
         </Box>
             
       </StyledBox3>
-    </ColumnPaper>1
+    </ColumnPaper>
 
-  {showProfile && <Profile showProfile={showProfile} toggleProfile={toggleProfile} onDisplayNameUpdate={handleDisplayNameUpdate} />}
 
   </>
   )

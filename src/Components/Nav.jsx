@@ -1,32 +1,12 @@
 import React from 'react'
-import { Link,useNavigate } from 'react-router-dom'
-import {AppBar, Toolbar, Typography, Button,useMediaQuery,useTheme,Box,Stack} from '@mui/material'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import { useLocation } from 'react-router-dom';
 import { useState,useEffect, } from 'react';
 import { Profile } from './Profile';
 import { SideBar } from './SideBar';
-import {styled} from '@mui/system';
-import Paper from '@mui/material/Paper'
-
-const StyledContainer = styled(Paper)(
-  {
-    elevation: 3,
-    bordershadow: 3,
-    borderRadius: 3,
-    width: '100%',
-    padding: '8px', 
-
-    color:'#000',
-  }
-)
 
 export const Nav = ({isLoggedIn, onSignOut,toggleProfile,showProfile}) => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
     const location = useLocation();
-    const  {displayName, email, uid} =  location.state || {};
-    const navigate = useNavigate();
+    const  {displayName,} =  location.state || {};
     const [userDisplayName, setUserDisplayName] = useState(
       localStorage.getItem('userDisplayName') || displayName || ''
     );

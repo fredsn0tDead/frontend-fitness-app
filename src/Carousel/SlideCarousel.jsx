@@ -7,10 +7,9 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import { Animation } from './Animation'
 import { fetchData } from '../utils/fetch'
-import { exerciseData } from '../utils/fetch'
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { Typography,TextField,Box } from '@mui/material';
-
+import image1 from '../Assets/HAPPYw.png'
 
 const excersiselist = [
     {
@@ -31,7 +30,7 @@ const excersiselist = [
 ]
 const StyledExerciseNameContainer = styled('div')`
   text-align: center;
-  font-size: x-small;
+  font-size: 10px;
 `;
   
 const Styledheader = styled('span')`
@@ -49,6 +48,8 @@ const Styledheader = styled('span')`
 export const SlideCarousel = () => {
     const [exercise, setExercise] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
+    const [apiLimitReached, setApiLimitReached] = useState(false);
+
     useEffect(() => {
       // Define the async function inside useEffect and call it immediately
       const getExercise = async () => {
@@ -64,23 +65,29 @@ export const SlideCarousel = () => {
     
       getExercise();
     }, []);
-    if (!exercise.length) return 'Loading...';
+    if (!exercise) return 'Loading...';
     
     const slicedExercise = exercise.slice(0, 7);
     
     const handleInputChange = (e) => {
-      setSearchTerm(e.target.value);
+      setSearchTerm(e.target.value.toLowerCase());
     };
-    const handleSearch = async (e) => {
-      if (e.key === 'Enter') {
-        try {
-          const response = await fetchData(searchTerm);
-          setExercise(response);
-        } catch (error) {
+
+  const handleSearch = async (e) => {
+    if (e.key === 'Enter') {
+      try {
+        const response = await fetchData(searchTerm);
+        setExercise(response);
+        setApiLimitReached(false); 
+      } catch (error) {
+        if (error.message === 'API Rate Limit Reached') {
+          setApiLimitReached(true);
+        } else {
           console.error('Error fetching data:', error);
         }
       }
-    };
+    }
+  };
     return (
         <div className="container">
           <Animation text="Build a Workout plan that suits your build" delay={100} />
@@ -91,7 +98,7 @@ export const SlideCarousel = () => {
           justifyContent: 'center', // Center children along the main axis (vertically for a column layout)
     }}>
     <Typography variant="h6" component="h2" gutterBottom color='#0000' >
-       <div className='subheading' ><span>Discover new variations from our database of exercises</span> </div> 
+       <div className='subheading' ><span>Discover new variations from our database of exercises try them out and watch your progress explode!</span> </div> 
       </Typography>
       <TextField 
             style={{marginTop:'5px'}}
@@ -107,6 +114,7 @@ export const SlideCarousel = () => {
             onChange={handleInputChange}
             onKeyDown={handleSearch}
           />
+         
       </Box>
           <Swiper
             effect={'coverflow'}
@@ -133,11 +141,34 @@ export const SlideCarousel = () => {
             slicedExercise.map((data) => (  
               <SwiperSlide>
                 {/* <ExcersiseCard giflink= {da ta.equipment}/> */}
-                <img src={data.gifUrl}  loading ="lazy" />
+                <img src={data.gifUrl} alt='' loading ="lazy" />
                 <StyledExerciseNameContainer><Styledheader  key={data.id}>{data.name.toUpperCase()} </Styledheader></StyledExerciseNameContainer>
               </SwiperSlide>
             ))
           }
+
+      {apiLimitReached ? (
+
+          <img src={image1} alt="" loading="lazy" />
+      
+      ) : slicedExercise.length > 0 ? ( // Check if there's data
+        slicedExercise.map((data) => (
+          <SwiperSlide key={data.id}>
+            <img src={data.gifUrl} alt="" loading="lazy" />
+            <StyledExerciseNameContainer>
+              <Styledheader>{data.name.toUpperCase()}</Styledheader>
+            </StyledExerciseNameContainer>
+          </SwiperSlide>
+        ))
+      ) : (
+      
+          <Typography variant="body2" color="text.secondary">
+          <img src={image1} alt="" loading="lazy" />
+            No exercises found.
+          </Typography>
+      )}
+      
+
             
             <div className="slider-controler">
               <div className="swiper-button-prev slider-arrow">
@@ -150,7 +181,7 @@ export const SlideCarousel = () => {
             </div>
           </Swiper>
           
-          
+     
         </div>
       
       );

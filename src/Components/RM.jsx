@@ -3,8 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Grid, Card, 
 import { styled } from '@mui/system';
 
 const GifContainer = styled('div')`
-  width: /* Width of your image */ ;
-  height: /* Height of your image */ ;
+
   transition: opacity 0.3s ease-in-out;
 `;
 
@@ -20,9 +19,7 @@ export const RM = ({ isOpen, handleClose, excerise_array, excerise_description }
         handleClose();
     };
 
-    const handleLearnMoreClick = () => {
-        // Add your logic here.
-    };
+    
 
     return (
         <Dialog open={isOpen} onClose={handleModalClose}>

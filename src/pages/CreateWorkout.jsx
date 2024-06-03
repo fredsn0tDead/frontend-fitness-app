@@ -1,5 +1,4 @@
 import React from 'react'
-import { Box } from '@mui/system'
 import {styled} from '@mui/system';
 import Paper from '@mui/material/Paper'
 import Typography from '@mui/material/Typography'
@@ -11,7 +10,7 @@ import { auth } from '../Components/firebase';
 import {TextField,Button} from '@mui/material';
 import MeasurementsContext from '../Components/MeasurementsContext';
 import { useContext } from 'react';
-import { doc, setDoc, getDoc } from 'firebase/firestore'; 
+import { doc, setDoc } from 'firebase/firestore'; 
 import {firestore } from '../Components/firebase';
 
 const StyledHeader = styled('div')({
@@ -41,7 +40,7 @@ const Container = styled(Paper)({
 
 export const CreateWorkout = () => {
 const location = useLocation();
-  const  {displayName, email, uid} =  location.state || {};
+  const  {displayName,} =  location.state || {};
   const { measurements, updateMeasurements } = useContext(MeasurementsContext);
   
 
@@ -60,11 +59,7 @@ const location = useLocation();
     console.log('auth.currentUser', auth.currentUser)
   }, [userDisplayName]);
 
-  const [displayweight, setDisplayweight] = useState(0);
-  const [displayleg, setDisplayleg] = useState(0);
-  const [displaytorso, setDisplaytorso] = useState(0);
-  const [displayarm, setDisplayarm] = useState(0);
-  
+
 
   const handleDisplayNameUpdate = (newDisplayName) => {
     setUserDisplayName(newDisplayName);

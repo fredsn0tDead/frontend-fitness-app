@@ -1,5 +1,4 @@
 import React from 'react';
-import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import IMAGE1 from '../Assets/LB/Barbell__Decline_Skull_Crusher.gif';
@@ -19,7 +18,6 @@ import IMAGE18 from '../Assets/LAB/Cable_Close_Grip_Curl.gif';
 import IMAGE19 from '../Assets/LAB/Close_Grip_Bench_Press.gif';
 import IMAGE20 from '../Assets/LLB/Standing_Calf_Raise_.gif';
 import { styled } from '@mui/system';
-import {Paper} from '@mui/material'
 const CarouselContainer = styled('Paper')({
   overflow: 'hidden',
   width: '100%',

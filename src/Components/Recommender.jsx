@@ -1,63 +1,20 @@
 import React from 'react'
-import{styled} from '@mui/system'
 
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import {Link,useNavigate} from 'react-router-dom'
-import { useLocation } from 'react-router-dom';
-import { ExcersiseLog } from './ExcersiseLog';
-import { Box, Grid,Paper,ThemeProvider,createTheme } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 import { WorkoutCard } from './WorkoutCard';
-import image1 from '../Assets/images/image1.jpg'
 import image2 from '../Assets/images/Gorilla.jpg'
 import image3 from '../Assets/images/LankyBoi.jpg'
 import image4 from '../Assets/images/NormalBoi.jpg'
-import { useState } from 'react';
-import image6 from '../Assets/images/long_arms.jpg'
+import image5 from '../Assets/Trex.png'
+import image6 from '../Assets/wingspan.png'
 
-
-// import Barbell_Front_Squat from '../Assets/gif_images/Barbell_Front_Squat.gif'
-// import Close_Grip_Bench from '../Assets/gif_images/Close_Grip_Bench_Press.gif'
-// import High_Bar_Squat from '../Assets/gif_images/High_Bar_Squat.gif'
-// import Incline_Row from '../Assets/gif_images/Incline_Row.gif'
-// import Barbell_Lunge from '../Assets/gif_images/Barbell_Lunge.gif'
-// import Pendlay_Row from '../Assets/gif_images/Pendlay_Row.gif'
-// import Upright_Row from '../Assets/gif_images/Upright_Row.gif'
-// import Narrow_Pull_Up from '../Assets/gif_images/Narrow_Pull_Up.gif'
-// import Kettlebell_Front_Squat from '../Assets/gif_images/Kettlebell_Front_Squat.gif'
-// import Walking_Lunge from '../Assets/gif_images/Walking_Lunge.gif'
-// import Dumbbell_Romanian_Deadlift from '../Assets/gif_images/Dumbbell_Romanian_Deadlift.gif'
-// import Bench_Squat from '../Assets/gif_images/Bench_Squat.gif'
-// import Barbell_Sumo_Deadlift from '../Assets/gif_images/Barbell_Sumo_Deadlift.gif'
-// import Barbell_Reverse_Grip_Bench_Press from '../Assets/gif_images/Barbell_Reverse_Grip_Bench_Press.gif'
-// import Cable_Lateral_Raise from '../Assets/gif_images/Cable_Lateral_Raise.gif'
-// import One_Arm_Bent_Over_Row from '../Assets/gif_images/One_Arm_Bent_Over_Row.gif'
-// import Dumbbell_Shrug from '../Assets/gif_images/Dumbbell_Shrug.gif'
-// import Smith_machine_Single_Leg_Split_Squat from '../Assets/gif_images/Smith_machine_Single_Leg_Split_Squat.gif'
-// import Dumbbell_Seated_Overhead_Press from '../Assets/gif_images/Dumbbell_Seated_Overhead_Press.gif'
-// import Barbell_Lying_Triceps_Extensions from '../Assets/gif_images/Barbell_Lying_Triceps_Extensions.gif'
-// import Barbell_Straight_Legged_Deadlift from '../Assets/gif_images/Barbell_Straight_Legged_Deadlift.gif'
-// import Barbell_Bench_Press from '../Assets/gif_images/Barbell_Bench_Press.gif'
-// import Close_Grip_Bench_Press from '../Assets/gif_images/Close_Grip_Bench_Press.gif'
-// import Barbell_Low_Bar_Squat from '../Assets/gif_images/Barbell_Low_Bar_Squat.gif'
-// import Sissy_Squat from '../Assets/gif_images/Sissy_Squat.gif'
-// import EZ_Bar_Curl from '../Assets/gif_images/EZ_Bar_Curl.gif'
-// import Dumbell_Neutral_Grip_Extenstions from '../Assets/gif_images/Dumbell_Neutral_Grip_Extenstions.gif'
 import IMAGE1 from '../Assets/Learn_More/LT_resized.png';
 import IMAGE2 from '../Assets/Learn_More/LM_resized.png';
 import IMAGE3 from '../Assets/Learn_More/LB_resized.png';
 import IMAGE4 from '../Assets/Learn_More/ST_resized.png';
 import IMAGE5 from '../Assets/Learn_More/SM_resized.png';
 import IMAGE6 from '../Assets/Learn_More/SB_resized.png';
-import IMAGE7 from '../Assets/Learn_More/Bench_Bottom_resized_.png';
-import IMAGE8 from '../Assets/Learn_More/Bench_Top_resized_.png';
-import IMAGE9 from '../Assets/Learn_More/Bench_Mid_resized_.png';
-import IMAGE12 from '../Assets/Learn_More/long_arm_bottom_resized.png';
-import IMAGE10 from '../Assets/Learn_More/long_arm_top_resized.png';
-import IMAGE11 from '../Assets/Learn_More/long_arm_mid_resized.png';
 
-const theme = createTheme();
 
 //"Posterior chain exercise (hamstrings, glutes) with some lower back involvement."
 //"Triceps-focused isolation exercise with minimal torso involvement."
@@ -76,15 +33,7 @@ const longlegdescripition = [
   "Primarily strengthens the calf muscles, enhancing lower leg power and stability.",
   "Targets the quadriceps, glutes, and core, with an added cardiovascular benefit from the dynamic movement."
 ];
-const shortlegdescripition  = [
-  "Focuses on the quadriceps, with additional engagement of the core and upper back to stabilize the weight.",
-  "Primarily targets the quadriceps and anterior core, with secondary involvement of the glutes and upper back.",
-  "Targets the glutes, hamstrings, and lower back, emphasizing the inner thighs with a wider stance.",
-  "Works the quadriceps and glutes, with additional focus on balance and core stability during the reverse movement.",
-  "Strengthens the calf muscles, specifically when seated to isolate the gastrocnemius and soleus muscles.",
-  "Emphasizes the quadriceps, glutes, and hamstrings, with the high bar position also engaging the core and upper back.",
-  "Focuses on the quadriceps and glutes, with the split stance also challenging balance and stabilizer muscles."
-];
+
 
 const shortarmsdescription = [
   "Targets the chest muscles primarily, with secondary engagement of the triceps and shoulders.",
@@ -129,24 +78,11 @@ const proportionateDescriptions = [
   "Emphasizes the quadriceps and glutes, with the high bar position also engaging the core and lower back.",
   "Targets the upper chest, with secondary focus on the shoulders and triceps, enhancing pectoral development."
 ];
-const longArmsDescriptions = [
-  
-];
 
 
 
 
-const useStyles = styled((theme) => ({
-  
-  
-  button: {
-    backgroundColor: 'white', // Initial background color
-    transition: 'background-color 0.9 s ease', // Add a smooth transition for the background-color property
-    '&:hover': {
-      backgroundColor: 'grey', // Color to transition to on hover
-    },
-  },
-}));
+
 
 
 export const Recommender = () => {
@@ -155,8 +91,6 @@ export const Recommender = () => {
     return r.keys().map(r);
   }
   
-  const imageFiles = require.context('../Assets/LB', false, /\.(gif)$/);//
-  const imageFilesGB = require.context('../Assets/GB', false, /\.(gif)$/);
   const imageFilesNB = require.context('../Assets/NB', false, /\.(gif)$/);
   const imagesFilesSA = require.context('../Assets/SAB', false, /\.(gif)$/);
   const imagesFilesLA = require.context('../Assets/LAB', false, /\.(gif)$/);
@@ -250,7 +184,6 @@ imagesSA.forEach((image, index) => {
     });
 });
 
-  const classes = useStyles();
   return (
     <Box 
     sx={{
@@ -265,57 +198,7 @@ imagesSA.forEach((image, index) => {
           md: 30, // For medium screens and up
       },
   }}>
-        {/* <ThemeProvider theme={theme}> */}
-        {/* <Box className={classes.button}  sx={{
-          boxShadow:3,
-          borderRadius: 1,
-          bgcolor: 'background.paper',
-          m: 1, 
-          
-          maxWidth: 345,
         
-  
-          display: 'flex',
-          textAlign: 'center',
-          fontSize: '0.875rem',
-          fontWeight: '700',
-          marginBottom: 4,
-          
-
-        }}> */}
-          {/* <Typography variant="h3" sx={{fontFamily: 'Fjalla One',}}>
-         Having Trouble Creating a Workout plan? We Got You Covered   </Typography>
-         
-        <Typography variant="h5"></Typography>
-        </Box>
-        </ThemeProvider>
-    
-        <ThemeProvider theme={theme}>
-        <Box className={classes.button}  sx={{
-          boxShadow:3,
-          borderRadius: 1,
-          bgcolor: 'background.paper',
-          m: 1, 
-         
-          maxWidth: 345,
-        
-  
-          display: 'flex',
-          textAlign: 'center',
-          fontSize: '0.875rem',
-          fontWeight: '700',
-          marginBottom: 3,
-          
-
-        }}>
-        <Typography variant="h5" sx={{fontFamily: 'Fjalla One'}}>
-    Please Select Which Image best represents your anatomy
-
-    </Typography> */}
-         
-       
-        {/* </Box> */}
-        {/* </ThemeProvider> */}
     
     <Grid container spacing={2} pt={1} pl={2} pr={2} >
     
@@ -372,21 +255,21 @@ imagesSA.forEach((image, index) => {
       img={image4} 
       title ={'Naturally Balanced'} 
       description={'These excersises will be more beneficial if you have a more proportionate build. Your leveage is more balanced resulting in a more balanced physique. Majority of people will fall into this category .'} 
-     
+      TP={IMAGE4}
+      MP={IMAGE5}
+      BP={IMAGE6}
+      
      />
       </Grid>  
       <Grid item xs={4} >
             <WorkoutCard
               excerise_description={`These power-packed excersises normally demand a great deal of stress for the range of motion they require. However you will be able to get the maximum benefit from them with your shorter wingspan.`}
               excerise_array={imageArraySA}
-              img={image3}
-              TP={IMAGE8}
-              MP={IMAGE9}
-              BP={IMAGE7}
+              img={image5}
+           
               header={'T-Rex arms'}
               headline={'Unleashing the Mighty T-Rex: Conquering the Gym with Dino-Mite Arms!'}
-              main_description={`Try benching like the person is performing above you may notice even with a shoulder width grip your elbows stay tucked at a 45 degree naturally bringing the bar to your chest.
-              Keep this in mind and measure from your finger tips from one hand to the finger tips of your other hand. If this measurement is shorter than your height you may have a shorter wingspan than most and will be able to perform more reps with the same weight without putting to much stress on your joints.
+              main_description={`Measure from your finger tips from one hand to the finger tips of your other hand. If this measurement is shorter than your height you may have a shorter wingspan than most and will be able to perform more reps with the same weight without putting to much stress on your joints.
               `}
               bolded_description={`You will most likely be able to move alot more weight than your long armed counter-parts.`}
               title={'T-Rex Arms'}
@@ -400,13 +283,10 @@ imagesSA.forEach((image, index) => {
               excerise_description={`These excerises will allow you to maximize potential limiting factors that will arise from solely performing the standard squat, bench, deadlift.`}
               excerise_array={imageArrayLA}
               img={image6}
-              TP={IMAGE10}
-              MP={IMAGE11}
-              BP={IMAGE12}
+             
               header={'Long-Arms'}
               headline={'Long Arm of the Loft: Reaching New Heights in the Gym!'}
-              main_description={`Try performing the bench press like the person in the above sequence of photos grab the barbell with a wider than shoulder width grip, you will see your elbows have arrived way behind your body before stopping at your chest.
-              Keep this in mind and measure from your finger tips from one hand to the finger tips of your other hand. If this measurement is greater than your height you may a longer wingspan than most likely not be able to perform as many reps than someone shorter without putting alot stress on your joints.
+              main_description={`Measure from your finger tips from one hand to the finger tips of your other hand. If this measurement is greater than your height you may a longer wingspan than most likely not be able to perform as many reps than someone shorter without putting alot stress on your joints.
               `}
               title={'Wingspan Warrior'}
               bolded_description={`Important to note tricep training should take up the bulk of your arm training.`}

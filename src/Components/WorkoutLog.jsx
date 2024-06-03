@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { styled } from '@mui/system';
+import { Typography } from '@mui/material';
 import { Button, Card, CardContent, CardHeader, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 
 const Container = styled('div')({
@@ -68,15 +69,11 @@ const StyledCardHeader = styled(CardHeader)(({ theme }) => ({
 }));
 
 
-let id = 0;
 
-function createData(name, reps, sets, weight, rpe) {
-  id += 1;
-  return { id, name, reps, sets, weight, rpe };
-}
+
+
 
 export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete }) => {
-  const [isVisible, setIsVisible] = useState(true);
   const datestring = JSON.stringify(selecteddate);
   const formatedate = datestring.slice(1, 11);
   const [name,setName] = useState([]);
@@ -104,7 +101,7 @@ export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete 
     setWeight(initialWeights);
     console.log('name',name);
     console.log('weight',weight);
-  }, [workoutdata]); // Run the effect when workoutdata changes
+  }, [weight,name,workoutdata]); // Run the effect when workoutdata changes
 
   // ... (rest of your component code)
 
@@ -139,8 +136,10 @@ export const WorkoutLog_Card = ({ workoutdata, selecteddate,className, onDelete 
                   <React.Fragment key={index}>
                     {exercises.map((exercise, exerciseIndex) => (
                       
-                      console.log('name',name),
+                     
+                      
                       <TableRow key={exerciseIndex}>
+                        <Typography>{item.id}</Typography>
                         <TableCell align="left">{exercise.exercise}</TableCell>{/*add a button */}
                         <TableCell align="left">{exercise.sets}</TableCell>
                         <TableCell align="leftt">{exercise.reps}</TableCell>{/*add a button get all the reps over time */}

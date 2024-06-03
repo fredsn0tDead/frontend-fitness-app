@@ -1,41 +1,68 @@
 import React from 'react'
 import { LineChart } from '@mui/x-charts';
+import { Box } from '@mui/system';
 
-export const GraphBox = ({Datapoints,xAxialabel,yAxislabel}) => {
+
+export const GraphBox = ({Datapoints,xAxialabel,yAxislabel,xdatapoints,ydatapoints,valueformat}) => {
  // Check if weightDatapoints is null or undefined
- if (Datapoints === null || Datapoints === undefined) {
+
+ if (xdatapoints === null || xdatapoints === undefined || xdatapoints.length === 0 ) {
   // Render chart with default values
+
   return (
-    <LineChart
+    <Box sx={{ position: 'relative' }}> {/* Make the container relative */}
+
+    <LineChart sx={{fontFamily: "Fjalla One"}}
       xAxis={[{
-        data: [1, 2, 3, 5, 8, 10],
+        data: [],
         label: xAxialabel
       }]}
       series={[{
-        data: [0, 0, 0, 0, 0, 0], // Default values
+        data: [], // Default values
         label: yAxislabel,
-        area: true
+    
       }]}
       width={300}
       height={200}
+      
+      
     />
+        <Box sx={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)',
+            fontSize: '16px' // Adjust font size as needed
+          }}>
+          Loading Progression....
+        </Box>
+      
+    </Box>
   );
 }
 
 // Render chart with provided weightDatapoints
 return (
   <LineChart
+  sx={{fontFamily: "Fjalla One"}}
+    
     xAxis={[{
-      data: [1, 2, 3, 4, 5, 6], // Assuming x-axis data points are known
-      label: xAxialabel
+      data: xdatapoints, // Assuming x-axis data points are known
+      label: xAxialabel,
+      valueFormatter: valueformat,
+      
+          
     }]}
     series={[{
-      data: Datapoints,
+      data: ydatapoints,
       label: yAxislabel ,
-      area: true
+     
     }]}
     width={300}
-    height={200}
-  />
+    height={300}
+    
+  >
+  
+  </LineChart>
 );
 };

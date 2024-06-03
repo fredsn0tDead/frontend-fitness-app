@@ -14,19 +14,17 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
-import { auth } from './firebase';
 import { useEffect } from 'react';
 import { styled } from '@mui/system';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { fetchExcercises } from '../utils/fetch_';
+import excerNames from './exercise_names_C.json';
 
 export const ExcersiseLog = () => {
  const location = useLocation();
-  const excerNames = require('./exercise_names_C.json');
   const { displayName, email, uid } = location.state || {};
   const [user, setUser] = useState(null);
   const [submissionStatus, setSubmissionStatus] = useState(null);
-  const [exerciseNames, setExerciseNames] = useState(excerNames);
+  const [exerciseNames] = useState(excerNames);
 
   // useEffect(() => {
   //   const loadExerciseNames = async () => {
@@ -125,7 +123,6 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
     e.preventDefault();
     console.log('Submitting form data:', tableData.map((row) => row.exercise));//we want to store the weights and reps in the database
     const execersiseNameData = (tableData.map((row) => row.exercise));
-    const jsonData = JSON.stringify(tableData);
     console.log(execersiseNameData)
     if (user && uid) {
       try {

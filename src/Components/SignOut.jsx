@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, Typography, Button, Link } from '@mui/material';
+import { Container, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 export const SignOut = () => {

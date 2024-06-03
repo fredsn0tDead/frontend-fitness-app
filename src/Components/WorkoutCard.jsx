@@ -65,15 +65,18 @@ header,headline,main_description,bolded_description}) => {
     width: '100%',
   }}
 >
-  <Button 
-    size="small" 
-    color="primary" 
-    variant="outlined" 
-    onClick={openModal}
-    sx={{ marginBottom: { xs: 2, md: 0 }, marginRight: { xs: 0, md: 2 } }} // Adjust margin for buttons based on screen size
-  >
-    Learn More
-  </Button>
+{main_description && (
+    <Button 
+        size="small" 
+        color="primary" 
+        variant="outlined" 
+        onClick={openModal}
+        sx={{ marginBottom: { xs: 2, md: 0 }, marginRight: { xs: 0, md: 2 } }}
+    >
+        Learn More
+    </Button>
+
+)}
   <Button 
     size="small" 
     color="primary" 

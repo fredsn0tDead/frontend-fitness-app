@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import Button from '@mui/material/Button';
 import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
@@ -16,7 +15,6 @@ import MenuBookIcon from '@mui/icons-material/MenuBook';
 import DirectionsRunIcon from '@mui/icons-material/DirectionsRun';
 import { useState,useEffect } from 'react';
 import { useNavigate,useLocation,Link } from 'react-router-dom';
-import { styled, } from '@mui/material/styles';
 import { Typography } from '@mui/material';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import { Stack } from '@mui/system';
@@ -36,10 +34,7 @@ export const SideBar = ({onSignOut,toggleProfile,showProfile}) => {
       localStorage.setItem('userDisplayName', userDisplayName);
     }, [userDisplayName]);
   
-    const handleDisplayNameUpdate = (newDisplayName) => {
-      setUserDisplayName(newDisplayName);
-      console.log('New display name:', newDisplayName);
-    };
+ 
     const DrawerList = (
         <Box sx={{ 
           width: { xs: 50, sm: drawerWidth } 

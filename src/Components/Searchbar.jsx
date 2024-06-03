@@ -1,11 +1,6 @@
 import React from 'react'
-import Paper from '@mui/material/Paper';
-import InputBase from '@mui/material/InputBase';
-import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
 import SearchIcon from '@mui/icons-material/Search';
-import { maxWidth } from '@mui/system';
 import Box from '@mui/material/Box';
 import styled from '@mui/material/styles/styled';
 import Avatar from '@mui/material/Avatar';
@@ -51,10 +46,15 @@ export const Searchbar = ({Image,handleSearch}) => {
   );
   const [exerciseNames, setExerciseNames] = useState(excerNames);
   const [inputValue, setInputValue] = useState('');
-  console.log(exerciseNames);
+  const [inputError, setInputError] = useState(false);
+
   const handleChange = (event, newValue) => {
-    setInputValue(newValue); 
-    handleSearch(newValue);
+    const normalizedValue = newValue?.toUpperCase(); // Ensure case-insensitive match
+    setInputValue(normalizedValue);
+    setInputError(!exerciseNames.excerNames.includes(normalizedValue));
+    if (!inputError) {
+      handleSearch(normalizedValue); 
+    }
   };
 
  
@@ -77,6 +77,7 @@ export const Searchbar = ({Image,handleSearch}) => {
     renderInput={(params) => (
       //  Note: We now spread the params directly into StyledInputBase
       <StyledInputBase {...params}
+      
       placeholder='Search for excersise...' /> 
     )}
   />

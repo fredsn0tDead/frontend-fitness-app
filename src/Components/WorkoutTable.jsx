@@ -6,17 +6,33 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Button, Tab } from '@mui/material';
+import { Button, } from '@mui/material';
 import { useState,useEffect } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { TextField } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { styled } from '@mui/system';
+const StyledTableCell = styled(TableCell) ({
 
-function createData(ExceriseName,id,Weight,Reps,Sets,RPE)
- {
-    return { ExceriseName, id, Weight, Reps, Sets, RPE };
-  }
+
+    fontWeight: 'bold',
+    fontFamily: "Fjalla One",
+    fontSize: '15px',
+    color: 'black',
+});
+const StyledTableCellData = styled(TableCell) ({
+
+
+   
+    fontFamily: "Fjalla One",
+    fontSize: '10px',
+    color: 'black',
+});
+
+
 
 //functnoi
 // function createRows(data){
@@ -27,24 +43,22 @@ function createData(ExceriseName,id,Weight,Reps,Sets,RPE)
 //     return rows;
     
 // }
-function createRows(data) {
-    const rows = [];
-    data.forEach(entry => {
-        const workoutData = entry.Workoutdata;
-        const id = entry._id;
-        console.log('id',id)
-        workoutData.forEach(workout => {
-            rows.push(createData(workout.exercise, id, workout.weight, workout.reps, workout.sets, workout.rpe));
-        });
-    });
-    return rows;
-}
+
   
-export const WorkoutTable = ({data}) => {
+export const WorkoutTable = ({data,handleDateChange}) => {
     const [user, setUser] = useState(null);
     const location = useLocation();
-
-    const { displayName, email, uid } = location.state || {};
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState('');
+    
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+    
+        setSnackbarOpen(false);
+    };
+    const { uid } = location.state || {};
     useEffect(() => {
         const auth = getAuth();
     
@@ -56,33 +70,60 @@ export const WorkoutTable = ({data}) => {
           unsubscribe();
         };
       }, []);
+       console.log('data',data)
     
-    console.log('data',data);
-    
-    const rows = createRows(data);
-    console.log('rows',rows);
-    const [editedData, setEditedData] = useState(data.map(entry => ({
+
+      const [editedData, setEditedData] = useState(Array.isArray(data) ? data.map(entry => ({
         ...entry,
         Workoutdata: entry.Workoutdata.map(workout => ({ ...workout })),
-    })));
-
+    })) : []);
     // Function to handle editing of a specific workout entry
+    
+    // useEffect(() => {
+    //     // Reset editedData whenever there's new data or a refresh is requested
+    //     if (Array.isArray(data)) { 
+    //       setEditedData(data.map(entry => ({
+    //         ...entry,
+    //         Workoutdata: entry.Workoutdata.map(workout => ({ ...workout })),
+    //       })));
+    //     } else {
+    //       setEditedData([]); // Ensure editedData is empty if no data is available
+    //     }
+    //   }, [data, shouldRefresh]); 
+    
+      // ... rest of your component (functions, JSX) 
+    
+    
+      // ... rest of your component (functions, JSX) 
+    
+
     const handleEdit = (entryIndex, workoutIndex, field, value) => {
         const newData = [...editedData];
         newData[entryIndex].Workoutdata[workoutIndex][field] = value;
         setEditedData(newData);
     };
-    const handleDelete = async (entryId) => {
+    const handleDelete = async (exerciseId) => {
         try {
             // Make a DELETE request to the Flask backend
-            await axios.delete(`http://127.0.0.1:5000/delete_exercise_data/${entryId}`, {
+            await axios.delete(`http://127.0.0.1:5000/delete_exercise_data/${exerciseId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `${await user.getIdToken(false)}`,
                 },
             });
+
+            setEditedData(prevData => {
+                // Remove the entry from the data array
+                const newData = prevData.map(entry => ({
+                    ...entry,
+                    Workoutdata: entry.Workoutdata.filter(workout => workout.id !== exerciseId)
+                }));
     
-            // Optionally, update the state or perform any other necessary actions
+                // Remove the entry from the rows array if it exists
+             
+            });
+            setSnackbarMessage('Exercise has been removed');
+            setSnackbarOpen(true);
             console.log('Exercise data deleted successfully!');
         } catch (error) {
             console.error('Error deleting exercise data:', error);
@@ -115,25 +156,32 @@ export const WorkoutTable = ({data}) => {
     };
 
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{fontWeight:'bold',fontFamily: "Fjalla One"}}>
+        <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+    <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity="success">
+        {snackbarMessage}
+    </MuiAlert>
+</Snackbar>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Excerise Name </TableCell>
-            
-            <TableCell align='right' >Weight(Ibs)</TableCell>
-            <TableCell align='right'>Reps&nbsp;</TableCell>
-            <TableCell align='right'>Sets&nbsp;</TableCell>
-            <TableCell align='right'>RPE&nbsp;</TableCell>
-            <TableCell align='right'>Remove</TableCell>
+            <StyledTableCell >Excerise Name </StyledTableCell>
+            <StyledTableCell  >Weight(Ibs)</StyledTableCell>
+            <StyledTableCell >Reps&nbsp;</StyledTableCell>
+            <StyledTableCell >Sets&nbsp;</StyledTableCell>
+            <StyledTableCell >RPE&nbsp;</StyledTableCell>
+            <StyledTableCell >Remove</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
+            
                     {editedData.map((entry, entryIndex) => (
-                        entry.Workoutdata.map((workout, workoutIndex) => (
+                        
+                        entry.Workoutdata && entry.Workoutdata.map((workout, workoutIndex) => (
                             <TableRow key={`${entryIndex}-${workoutIndex}`}>
-                                <TableCell>{workout.exercise}</TableCell>
-                               
+                                
+                                <StyledTableCellData>{workout.exercise}</StyledTableCellData>
+                              
                                 <TableCell>
                                     <TextField
                                         type="text"
@@ -155,15 +203,15 @@ export const WorkoutTable = ({data}) => {
                                         onChange={e => handleEdit(entryIndex, workoutIndex, 'sets', e.target.value)}
                                     />
                                 </TableCell>
-                                <TableCell>
+                                <TableCell >
                                     <TextField
                                         type="text"
                                         value={workout.rpe}
                                         onChange={e => handleEdit(entryIndex, workoutIndex, 'rpe', e.target.value)}
                                     />
                                 </TableCell>
-                                <TableCell>
-                                    <Button variant='outlined' onClick={() => handleDelete(entryIndex)} sx={{padding: '10px', margin: '10px'}}>Delete</Button>
+                                <TableCell  sx={{ paddingLeft: '5px' }}>
+                                    <Button variant='outlined' onClick={() => handleDelete(entry._id)} sx={{padding: '10px', margin: '10px',}}>Delete </Button>
                                 </TableCell>
                                 
                             </TableRow>
@@ -174,6 +222,7 @@ export const WorkoutTable = ({data}) => {
 
 
                 }}>Save</Button>
+                
       </Table>
     </TableContainer>
 
