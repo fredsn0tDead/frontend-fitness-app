@@ -2,7 +2,7 @@ import React from 'react'
 import {Paper, Typography, Button, Stack,Box,styled,Fade,Slide} from '@mui/material';
 // import FitnessCenterIcon from '@mui/icons-material';
 import {useNavigate} from 'react-router-dom'
-
+import { Link } from 'react-router-dom';
 import { useState,useEffect } from 'react';
 import { FitnessCarsouel } from '../Components/FitnessCarsouel';
 const StyledHeader = styled(Paper)({
@@ -100,24 +100,25 @@ export const Homepage = () => {
       >
         <Fade in={fadeIn} timeout={3000}>
           
-          <Button
+        <Link to="/login"> {/* Use Link component instead of href */}
+        <Button
             variant="contained"
-            href="/login"
             sx={{
-              fontSize: 20,
-              fontFamily: 'Fjalla One',
-              opacity: fadeIn ? 1 : 0,
-              transition: 'opacity 1s ease-in-out',
+                fontSize: 20,
+                fontFamily: 'Fjalla One',
+                opacity: fadeIn ? 1 : 0,
+                transition: 'opacity 1s ease-in-out',
             }}
-          >
+        >
             Already a member?
-          </Button>
+        </Button>
+    </Link>
         </Fade>
         <Fade in={fadeIn} timeout={3000}>
-          
+          <Link to="/signup">
           <Button
             variant="outlined"
-            href="/signup"
+     
             sx={{
               fontSize: 20,
               fontFamily: 'Fjalla One',
@@ -127,6 +128,7 @@ export const Homepage = () => {
           >
             Join Now
           </Button>
+          </Link>
         </Fade>
       </Box>
       

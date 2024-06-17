@@ -77,6 +77,7 @@ export const WorkoutTable = ({data,handleDateChange}) => {
         ...entry,
         Workoutdata: entry.Workoutdata.map(workout => ({ ...workout })),
     })) : []);
+    console.log('Edited Data:', editedData);
     // Function to handle editing of a specific workout entry
     
     // useEffect(() => {
@@ -104,24 +105,22 @@ export const WorkoutTable = ({data,handleDateChange}) => {
     };
     const handleDelete = async (exerciseId) => {
         try {
+            
             // Make a DELETE request to the Flask backend
-            await axios.delete(`http://127.0.0.1:5000/delete_exercise_data/${exerciseId}`, {
+            await axios.delete(`${process.env.REACT_APP_API_URL}/delete_exercise_data/${exerciseId}`, {
                 headers: {
                     'Content-Type': 'application/json',
                     Authorization: `${await user.getIdToken(false)}`,
                 },
             });
 
-            setEditedData(prevData => {
-                // Remove the entry from the data array
-                const newData = prevData.map(entry => ({
-                    ...entry,
-                    Workoutdata: entry.Workoutdata.filter(workout => workout.id !== exerciseId)
-                }));
-    
-                // Remove the entry from the rows array if it exists
-             
-            });
+            setEditedData((prevData) => {
+                // Remove the workout entry
+                return prevData.map(entry => ({
+                  ...entry,
+                  Workoutdata: entry.Workoutdata.filter(workout => workout.id !== exerciseId)
+                })).filter(entry => entry.Workoutdata.length > 0);  // Filter out entries with empty Workoutdata
+              });
             setSnackbarMessage('Exercise has been removed');
             setSnackbarOpen(true);
             console.log('Exercise data deleted successfully!');
@@ -135,7 +134,7 @@ export const WorkoutTable = ({data,handleDateChange}) => {
         const execersiseNameData = editedData.map((row) => row.ExerciseName);
         if (user && uid) {
             try {
-                await axios.post('http://127.0.0.1:5000/edit-form', {
+                await axios.post(`${process.env.REACT_APP_API_URL}/edit-form`, {
                     data: editedData,
                     exerciseNames: execersiseNameData
                 }, {
@@ -211,7 +210,8 @@ export const WorkoutTable = ({data,handleDateChange}) => {
                                     />
                                 </TableCell>
                                 <TableCell  sx={{ paddingLeft: '5px' }}>
-                                    <Button variant='outlined' onClick={() => handleDelete(entry._id)} sx={{padding: '10px', margin: '10px',}}>Delete </Button>
+                                    {console.log('entry',entry.id)}
+                                    <Button variant='outlined' onClick={() => handleDelete(entry.id)} sx={{padding: '10px', margin: '10px',}}>Delete </Button>
                                 </TableCell>
                                 
                             </TableRow>

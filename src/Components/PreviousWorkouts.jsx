@@ -201,7 +201,7 @@ export const PreviousWorkouts = () => {
           
           const idToken = await user.getIdToken(false);
           console.log(idToken)
-          const response = await fetch(`http://127.0.0.1:5000/get-workout?date=${formattedDate}`, {
+          const response = await fetch(`${process.env.REACT_APP_API_URL}/get-workout?date=${formattedDate}`, {
             headers: {
               Authorization: `${idToken}`,
             },
@@ -249,7 +249,7 @@ export const PreviousWorkouts = () => {
   const handleDelete = async (entryId) => {
     try {
         // Make a DELETE request to the Flask backend
-        await axios.delete(`http://127.0.0.1:5000/delete_exercise_data/${entryId}`, {
+        await axios.delete(`${process.env.REACT_APP_API_URL}/${entryId}`, {
             headers: {
                 'Content-Type': 'application/json',
                 Authorization: `${await user.getIdToken(false)}`,

@@ -17,16 +17,18 @@ import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { styled } from '@mui/system';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import {Snackbar} from '@mui/material';
+import MuiAlert from '@mui/material/Alert';
 import excerNames from './exercise_names_C.json';
 
 export const ExcersiseLog = () => {
  const location = useLocation();
   const { displayName, email, uid } = location.state || {};
   const [user, setUser] = useState(null);
-  const [submissionStatus, setSubmissionStatus] = useState(null);
+  const [submissionStatus, setSubmissionStatus] = useState(false);
   const [exerciseNames] = useState(excerNames);
-
-  // useEffect(() => {
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');  // useEffect(() => {
   //   const loadExerciseNames = async () => {
   //     try {
   //       const response = await fetch('Movie.json');
@@ -118,7 +120,6 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
   const [tableData, setTableData] = useState([
     { id: 1, exercise: '', sets: '', reps: '', weight: '', rpe: '' },
   ]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log('Submitting form data:', tableData.map((row) => row.exercise));//we want to store the weights and reps in the database
@@ -126,7 +127,7 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
     console.log(execersiseNameData)
     if (user && uid) {
       try {
-        await axios.post('http://127.0.0.1:5000/submit-form',{
+        await axios.post(`${process.env.REACT_APP_API_URL}/submit-form`,{
           data: tableData,  // The original table data
           exerciseNames: execersiseNameData  // The exercise names
         }, {
@@ -134,16 +135,21 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
             'Content-Type': 'application/json',
             Authorization: `${await user.getIdToken()}`,
           },
+          
         });
-
-        setSubmissionStatus('success');
+        setSnackbarMessage('Exercise has been Saved');
+        
+       
+        setSnackbarOpen(true);
+        
+        
       } catch (error) {
         console.error('Error storing data:', error);
-        setSubmissionStatus('failure');
+        setSnackbarMessage('There was an issue saving your exercise');
       }
     }
   };
-
+  console.log('Snackbar', snackbarMessage);
   const addRow = () => {
     const newRow = { id: tableData.length + 1, exercise: '', sets: '', reps: '', weight: '', rpe: '' };
     setTableData([...tableData, newRow]);
@@ -163,7 +169,13 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
     const updatedData = tableData.map((row) => (row.id === id ? { ...row, [field]: value } : row));
     setTableData(updatedData);
   };
+  const handleSnackbarClose = (event, reason) => {
+    if (reason === 'clickaway') {
+        return;
+    }
 
+    setSnackbarOpen(false);
+};
   return (
     <div name="exercise-log">
       <Box sx={{ paddingTop: '10px' }}>
@@ -280,11 +292,12 @@ const StyledAutoField = styled(Autocomplete)(({ theme }) => ({
           </StyledTable>
         </form>
       </Box>
-      {submissionStatus && (
-        <Typography color={submissionStatus === 'success' ? 'success' : 'error'}>
-          {submissionStatus === 'success' ? 'Workout saved successfully!' : 'Failed to save workout.'}
-        </Typography>
-      )}
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
+    <MuiAlert elevation={6} variant="filled" onClose={handleSnackbarClose} severity="success">
+        {snackbarMessage}
+    </MuiAlert>
+</Snackbar>
+      
     </div>
   );
 };

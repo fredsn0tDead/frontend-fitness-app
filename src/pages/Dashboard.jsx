@@ -173,7 +173,7 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
         
         const idToken = await user.getIdToken(false);
         console.log(idToken);
-        const response = await fetch(`http://127.0.0.1:5000/get-workout-new?start_date=${formattedStartDate}&end_date=${formattedEndDate}&excersiseName=${excersiseName}`, {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/get-workout-new?start_date=${formattedStartDate}&end_date=${formattedEndDate}&excersiseName=${excersiseName}`, {
       method: "GET",
       headers: {
         Authorization: `${idToken}`,
@@ -237,13 +237,13 @@ export const Dashboard = ({ showProfile,toggleProfile }) => {
   if (Array.isArray(workoutData) && workoutData.length <= 2) {
     workoutData.forEach((data) => {
       // Assuming data.Workoutdata is also an array
-      const id = data._id;
+      const id = data.id;
       console.log('id:', id);
       data.Workoutdata.forEach((exercise) => {
         weightArray.push(exercise.weight);
         repsArray.push(exercise.reps);
       });
-      idArray.push(data._id);
+      idArray.push(data.id);
     });
     console.log('repsArray:', repsArray);
     console.log('idArray:', idArray);

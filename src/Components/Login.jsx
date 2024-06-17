@@ -16,6 +16,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from './firebase';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 const defaultTheme = createTheme();
 
 export const Login = ({onLogin}) => {
@@ -23,28 +25,30 @@ export const Login = ({onLogin}) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const handleSubmit = (e) => {
-      e.preventDefault();
-      signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-          // Signed in
-          const { displayName, email, uid } = userCredential.user;
-          navigate("/dashboard",{ state: {  displayName, email, uid } })
-          onLogin({ displayName, email, uid });
-          console.log(displayName, email, uid );
-          setError(null);
-      })
-      .catch((error) => {
-          // const errorCode = error.code;
-          // const errorMessage = error.message;
-          // console.log(errorCode, errorMessage)
-          setError('Invalid username or password.');
-          console.error('Error signing in:', error);
-      });
-      const isLoggedIn = true;
-      onLogin(isLoggedIn);
-     
-  }
+    const [snackbarOpen, setSnackbarOpen] = useState(false); // State to manage snackbar visibility
+
+    const handleCloseSnackbar = () => {
+      setSnackbarOpen(false);
+  };
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            // Signed in
+            const { displayName, email, uid } = userCredential.user;
+            navigate("/dashboard", { state: {  displayName, email, uid } });
+            onLogin({ displayName, email, uid });
+            console.log(displayName, email, uid );
+            setError(null);
+        })
+        .catch((error) => {
+            setSnackbarOpen(true);
+            setError('Invalid username or password.');
+            console.error('Error signing in:', error);
+        });
+};
   return (
     <ThemeProvider theme={defaultTheme}>
     <Container component="main" maxWidth="xs">
@@ -117,6 +121,11 @@ export const Login = ({onLogin}) => {
       </Box>
 
     </Container>
+    <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleCloseSnackbar}>
+                <MuiAlert elevation={6} variant="filled" onClose={handleCloseSnackbar} severity="error">
+                    {error}
+                </MuiAlert>
+            </Snackbar>
   </ThemeProvider>
   );
 }

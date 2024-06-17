@@ -10,20 +10,38 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useState } from 'react';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 import { NavLink, useNavigate } from 'react-router-dom';
-import {  createUserWithEmailAndPassword, updateProfile  } from 'firebase/auth';
+import {  createUserWithEmailAndPassword, updateProfile,fetchSignInMethodsForEmail   } from 'firebase/auth';
 import { auth } from './firebase';
+
 const defaultTheme = createTheme();
 export const Signup = () => {
     const navigate = useNavigate();
     const [firstName, setFirstName] = useState('')
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
-  
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+
+    const handleSnackbarClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        setOpenSnackbar(false);
+    };
+
     const handleSubmit = async (e) => {
       e.preventDefault();
   
       try {
+        const signInMethods = await fetchSignInMethodsForEmail(auth, email);
+
+            if (signInMethods.length > 0) {
+                setOpenSnackbar(true);
+                return;
+            }
         // Create the user with email and password
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
   
@@ -129,6 +147,16 @@ export const Signup = () => {
               </Grid>
             </Grid>
           </Box>
+          <Snackbar open={openSnackbar} autoHideDuration={6000} onClose={handleSnackbarClose}>
+                        <MuiAlert
+                            elevation={6}
+                            variant="filled"
+                            onClose={handleSnackbarClose}
+                            severity="error"
+                        >
+                            Email is already in use with another account.
+                        </MuiAlert>
+                    </Snackbar>
         </Box>
         
       </Container>
